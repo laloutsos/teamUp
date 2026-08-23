@@ -9,10 +9,12 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Str;
 
 class GameController extends Controller
 {
     use AuthorizesRequests;
+
     /**
      * Display a listing of the resource.
      */
@@ -36,7 +38,6 @@ class GameController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -54,10 +55,8 @@ class GameController extends Controller
             'team_logo' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:2048'
         ]);
 
-
-
         // Hardcoded user id
-        $validatedData['user_id'] =  Auth::user()->id;
+        $validatedData['user_id'] = Auth::user()->id;
 
         // Check for image
         if ($request->hasFile('team_logo')) {
@@ -67,7 +66,6 @@ class GameController extends Controller
             // Add path to validated data
             $validatedData['team_logo'] = $path;
         }
-
 
         // Submit to Database
         Game::create($validatedData);
@@ -98,8 +96,7 @@ class GameController extends Controller
      */
     public function update(Request $request, Game $game)
     {
-        //Check if user is authorized
-
+        // Check if user is authorized
         $this->authorize('update', $game);
 
         $validatedData = $request->validate([
@@ -119,11 +116,8 @@ class GameController extends Controller
             'team_logo' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:2048'
         ]);
 
-
-
         // Check for image
         if ($request->hasFile('team_logo')) {
-
             // Delete old logo
             Storage::delete('public/logos/' . basename($game->team_logo));
             // Store the file and get path
@@ -132,7 +126,6 @@ class GameController extends Controller
             // Add path to validated data
             $validatedData['team_logo'] = $path;
         }
-
 
         // Submit to Database
         $game->update($validatedData);
@@ -155,11 +148,50 @@ class GameController extends Controller
 
         $game->delete();
 
-        //Check if the request came from the Dashboard
+        // Check if the request came from the Dashboard
         if (request()->query('from') == 'dashboard') {
             return redirect()->route('dashboard.index')->with('success', 'Game Listing deleted successfully');
         }
 
         return redirect()->route('games.index')->with('success', 'Game Listing deleted successfully');
+    }
+
+    /**
+     * Search Game Listings 
+     * GET /games/search
+     */
+    /**
+     * Search Game Listings 
+     * GET /games/search
+     */
+    public function search(Request $request): View
+    {
+        $keywords = trim($request->input('keywords') ?? $request->input('search') ?? '');
+        $location = trim($request->input('location', ''));
+
+        $query = Game::query();
+
+        if ($keywords !== '') {
+            $query->where(function ($q) use ($keywords) {
+                $q->where('title', 'ilike', "%{$keywords}%")
+                    ->orWhere('description', 'ilike', "%{$keywords}%")
+                    ->orWhere('tags', 'ilike', "%{$keywords}%")
+                    ->orWhere('game_type', 'ilike', "%{$keywords}%")
+                    ->orWhere('team_name', 'ilike', "%{$keywords}%")
+                    ->orWhere('more_information', 'ilike', "%{$keywords}%")
+                    ->orWhere('team_description', 'ilike', "%{$keywords}%");
+            });
+        }
+
+        if ($location !== '') {
+            $query->where(function ($q) use ($location) {
+                $q->where('city', 'ilike', "%{$location}%")
+                    ->orWhere('exact_location', 'ilike', "%{$location}%");
+            });
+        }
+
+        $games = $query->paginate(12)->appends($request->query());
+
+        return view('games.index')->with('games', $games);
     }
 }

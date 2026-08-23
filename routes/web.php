@@ -12,6 +12,7 @@ use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\ApplicantController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home')->middleware('auth');
+Route::get('/games/search', [GameController::class, 'search'])->name('games.search');
 Route::resource('games', GameController::class)->middleware('auth');
 
 Route::middleware('guest')->group(function () {
