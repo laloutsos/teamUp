@@ -24,8 +24,8 @@
         </button>
     </div>
 
-    <!-- Popular Tags Links -->
-    <div class="flex flex-wrap items-center justify-center md:justify-end gap-1.5 text-xs text-sky-100">
+    <!-- Popular Tags Links (Centered) -->
+    <div class="flex flex-wrap items-center justify-center gap-1.5 text-xs text-sky-100">
         <span class="opacity-80 font-medium mr-1 text-[11px]">Popular:</span>
         <a href="{{ route('games.search', ['keywords' => 'Football']) }}"
             class="px-2.5 py-1 bg-white/15 hover:bg-white/25 rounded-full border border-white/10 transition-colors flex items-center gap-1 text-[11px]">
