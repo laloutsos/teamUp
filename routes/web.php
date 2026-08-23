@@ -10,6 +10,8 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\ApplicantController;
+use App\Http\Controllers\GeocodeController;
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home')->middleware('auth');
 Route::get('/games/search', [GameController::class, 'search'])->name('games.search');
@@ -33,3 +35,5 @@ Route::middleware('auth')->group(function () {
 
 Route::post('/games/{game}/apply', [ApplicantController::class, 'store'])->name('applicant.store')->middleware('auth');
 Route::delete('/applicants/{applicant}', [ApplicantController::class, 'destroy'])->name('applicant.destroy')->middleware('auth');
+
+Route::get('/geocode', [GeocodeController::class, 'geocode']);
