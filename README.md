@@ -37,3 +37,24 @@ When players find a suitable listing, they can join the game and fill the remain
 The goal of TeamUp is to make finding players and organizing sports games simple, fast, and accessible.
 
 Whether you are missing one player, looking for an entire team, or simply want to find people nearby who share the same passion for a sport, TeamUp provides a single platform to connect with them.
+
+## Technologies
+
+### Backend
+- **Laravel** — PHP framework used for the application backend and overall architecture
+- **PostgreSQL** — Relational database for storing application data
+- **Laravel Middleware** — Authentication and access control
+
+### Frontend
+- **Blade** — Laravel's templating engine
+- **Tailwind CSS** — Utility-first CSS framework for responsive UI design
+- **Alpine.js** — Lightweight JavaScript framework for interactive UI components
+- **JavaScript** — Client-side functionality and dynamic interactions
+- **CSS** — Additional styling and customization
+
+### Maps
+- **Mapbox** — Interactive maps and location-based functionality
+
+## Development Status
+
+TeamUp is an ongoing project and will remain under active development. New features, improvements, and functionality will be continuously added over time as the platform evolves.
