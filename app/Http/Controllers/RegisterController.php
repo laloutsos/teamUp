@@ -22,14 +22,17 @@ class RegisterController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:100',
             'email' => 'required|string|email|max:100|unique:users',
+            'city' => 'nullable|string|max:150',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
         // Hash Password
         $validatedData['password'] = Hash::make($validatedData['password']);
 
-        // Create User
-        $user = User::create($validatedData);
+        // Create User with location data
+        User::create($validatedData);
 
         return redirect()->route('login')->with('success', 'You are registered and can login');
     }

@@ -2,12 +2,12 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
 
         @auth
-            <!-- Games Grid Section  -->
+            <!-- Games Grid Section -->
             <div class="space-y-4">
                 <div class="flex items-center justify-between">
                     <h3 class="text-xl font-bold text-gray-900 tracking-tight flex items-center gap-2">
                         <i class="fa-solid fa-fire text-rose-500"></i>
-                        <span>Upcoming Games</span>
+                        <span>{{ $title ?? 'Upcoming Games' }}</span>
                     </h3>
 
                     <a href="{{ route('games.index') }}"
@@ -27,7 +27,8 @@
                                 class="w-12 h-12 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center mx-auto text-xl">
                                 <i class="fa-solid fa-ghost"></i>
                             </div>
-                            <p class="text-gray-500 font-medium text-sm">No games available right now.</p>
+                            <p class="text-gray-500 font-medium text-sm">No games available near your location right now.
+                            </p>
                             <a href="{{ route('games.create') }}"
                                 class="inline-flex items-center gap-2 px-4 py-2 bg-sky-500 hover:bg-sky-600 text-white text-xs font-semibold rounded-xl shadow-sm transition-colors">
                                 <i class="fa-solid fa-plus"></i>
@@ -48,7 +49,7 @@
                 </div>
             @endif
 
-            <!-- Bottom Banner  -->
+            <!-- Bottom Banner -->
             <x-bottom-banner />
         @else
             <!-- Dedicated Guest Landing Card -->

@@ -1,4 +1,37 @@
 <x-layout>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css" rel="stylesheet" />
+
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
+    <link rel="stylesheet"
+        href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css"
+        type="text/css">
+
+    <style>
+        /* Custom styling to align Mapbox Geocoder input with Tailwind inputs */
+        .mapboxgl-ctrl-geocoder {
+            width: 100% !important;
+            max-width: none !important;
+            box-shadow: none !important;
+            border: 1px solid #E5E7EB !important;
+            border-radius: 0.75rem !important;
+            background-color: #F9FAFB !important;
+            font-family: inherit !important;
+        }
+
+        .mapboxgl-ctrl-geocoder--input {
+            padding-left: 36px !important;
+            font-size: 0.875rem !important;
+            color: #111827 !important;
+            height: 42px !important;
+        }
+
+        .mapboxgl-ctrl-geocoder--icon-search {
+            left: 10px !important;
+            top: 11px !important;
+        }
+    </style>
+
     <div class="min-h-[85vh] flex items-center justify-center px-4 py-8">
         <!-- Main Card Container -->
         <div
@@ -6,7 +39,6 @@
 
             <!-- Header Section -->
             <div class="text-center space-y-2">
-                <!-- App Icon / Logo Placeholder -->
                 <div
                     class="w-12 h-12 bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 rounded-2xl mx-auto flex items-center justify-center shadow-md text-white text-xl">
                     <i class="fa-solid fa-user-plus"></i>
@@ -27,6 +59,20 @@
                 <!-- Email Field -->
                 <x-inputs.text id="email" name="email" type="email" placeholder="Email Address"
                     icon="fa-regular fa-envelope" />
+
+                <!-- Location Field (Mapbox Geocoder) -->
+                <div class="space-y-1">
+                    <label class="block text-xs font-medium text-gray-600">Your Location / City</label>
+                    <div id="geocoder-container"></div>
+                    @error('city')
+                        <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Hidden Location Inputs -->
+                <input type="hidden" name="city" id="city">
+                <input type="hidden" name="latitude" id="latitude">
+                <input type="hidden" name="longitude" id="longitude">
 
                 <!-- Password Field -->
                 <x-inputs.text id="password" name="password" type="password" placeholder="Password"
@@ -55,4 +101,36 @@
 
         </div>
     </div>
+
+    <!-- Mapbox Initialization Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mapboxToken =
+                '{{ config('services.mapbox.token') }}'; // Or add your Mapbox Public Token directly here
+
+            const geocoder = new MapboxGeocoder({
+                accessToken: mapboxToken,
+                types: 'place,locality,neighborhood',
+                placeholder: 'Search location (e.g. Evosmos, Thessaloniki)',
+                mapboxgl: mapboxgl
+            });
+
+            geocoder.addTo('#geocoder-container');
+
+            geocoder.on('result', function(e) {
+                const placeName = e.result.text;
+                const coordinates = e.result.center; // [lng, lat]
+
+                document.getElementById('city').value = placeName;
+                document.getElementById('longitude').value = coordinates[0];
+                document.getElementById('latitude').value = coordinates[1];
+            });
+
+            geocoder.on('clear', function() {
+                document.getElementById('city').value = '';
+                document.getElementById('longitude').value = '';
+                document.getElementById('latitude').value = '';
+            });
+        });
+    </script>
 </x-layout>

@@ -29,6 +29,9 @@ class UserFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
+            'city' => fake()->randomElement(['Thessaloniki', 'Evosmos', 'Kalamaria', 'Toumba', 'Kentro']),
+            'latitude' => fake()->latitude(40.5000, 40.7000), // Coordinates around Thessaloniki area
+            'longitude' => fake()->longitude(22.8000, 23.0000),
             'remember_token' => Str::random(10),
         ];
     }
@@ -38,7 +41,7 @@ class UserFactory extends Factory
      */
     public function unverified(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn(array $attributes) => [
             'email_verified_at' => null,
         ]);
     }
