@@ -10,6 +10,14 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
     <script src="//unpkg.com/alpinejs" defer></script>
 
+    <script>
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('light');
+        }
+    </script>
+
     <title>{{ $title ?? 'Welcome to TeamUp' }}</title>
     <style>
         [x-cloak] {
@@ -18,7 +26,7 @@
     </style>
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
     <x-header />
     @if (request()->is('/'))
         @auth
@@ -31,9 +39,18 @@
         {{ $slot }}
     </main>
 
+    <script>
+        function toggleDarkMode() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+    </script>
     <script src="{{ asset('js/script.js') }}"></script>
-
-
 </body>
 
 </html>
