@@ -20,16 +20,21 @@ class ProfileController extends Controller
 
         $validatedData = $request->validate([
             'name' => 'required|string',
-            'email' => 'required|string|email',
+            'email' => 'required|string|email|unique:users,email,' . $user->id,
+            'city' => 'nullable|string|max:255',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
             'avatar' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:2048'
         ]);
 
-        // Get user name and email
         $user->name = $request->input('name');
         $user->email = $request->input('email');
-        if ($request->hasFile('avatar')) {
+        $user->location = $request->input('city');
+        $user->latitude = $request->input('latitude');
+        $user->longitude = $request->input('longitude');
 
-            //Delete old Avatar if exists
+        if ($request->hasFile('avatar')) {
+            // Delete old Avatar if exists
             if ($user->avatar) {
                 Storage::delete('public/' . $user->avatar);
             }

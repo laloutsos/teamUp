@@ -1,4 +1,38 @@
 <x-layout>
+    <!-- Mapbox GL JS & Geocoder CSS/JS -->
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css" rel="stylesheet" />
+
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
+    <link rel="stylesheet"
+        href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css"
+        type="text/css">
+
+    <style>
+        /* Custom styling to align Mapbox Geocoder input with Tailwind inputs */
+        .mapboxgl-ctrl-geocoder {
+            width: 100% !important;
+            max-width: none !important;
+            box-shadow: none !important;
+            border: 1px solid #E5E7EB !important;
+            border-radius: 0.75rem !important;
+            background-color: #F9FAFB !important;
+            font-family: inherit !important;
+        }
+
+        .mapboxgl-ctrl-geocoder--input {
+            padding-left: 36px !important;
+            font-size: 0.875rem !important;
+            color: #111827 !important;
+            height: 42px !important;
+        }
+
+        .mapboxgl-ctrl-geocoder--icon-search {
+            left: 10px !important;
+            top: 11px !important;
+        }
+    </style>
+
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <section class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
 
@@ -11,11 +45,12 @@
                     </h3>
 
                     <p class="text-gray-500 text-xs mt-1">
-                        Update your account details and profile picture.
+                        Update your account details, location, and profile picture.
                     </p>
                 </div>
 
-                <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="space-y-4">
+                <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data"
+                    class="space-y-4">
                     @csrf
                     @method('PUT')
 
@@ -39,6 +74,23 @@
                     <!-- Email Field -->
                     <x-inputs.text id="email" name="email" type="email" label="Email Address"
                         value="{{ auth()->user()->email }}" />
+
+                    <!-- Location Field (Mapbox Geocoder) -->
+                    <div class="space-y-1">
+                        <label class="block text-xs font-medium text-gray-600">Location / City</label>
+                        <div id="geocoder-container"></div>
+                        @error('city')
+                            <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Hidden Location Inputs -->
+                    <input type="hidden" name="city" id="city"
+                        value="{{ old('city', auth()->user()->location) }}">
+                    <input type="hidden" name="latitude" id="latitude"
+                        value="{{ old('latitude', auth()->user()->latitude) }}">
+                    <input type="hidden" name="longitude" id="longitude"
+                        value="{{ old('longitude', auth()->user()->longitude) }}">
 
                     <!-- Submit Button -->
                     <div class="pt-2">
@@ -189,4 +241,68 @@
             </div>
         </section>
     </div>
+
+    <!-- Mapbox Initialization Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mapboxToken = '{{ config('services.mapbox.token') }}';
+
+            const geocoder = new MapboxGeocoder({
+                accessToken: mapboxToken,
+                types: 'place,locality,neighborhood',
+                placeholder: 'Search location (e.g. Evosmos, Thessaloniki)',
+                mapboxgl: mapboxgl
+            });
+
+            geocoder.addTo('#geocoder-container');
+
+            const savedLocation = document.getElementById('city').value;
+            if (savedLocation) {
+                geocoder.setInput(savedLocation);
+
+                // Close dropdown suggestions and remove focus on page load
+                setTimeout(() => {
+                    const suggestions = document.querySelector('.suggestions');
+                    if (suggestions) {
+                        suggestions.style.display = 'none';
+                    }
+                    const geocoderInput = document.querySelector('.mapboxgl-ctrl-geocoder--input');
+                    if (geocoderInput) {
+                        geocoderInput.blur();
+                    }
+                }, 100);
+            }
+
+            geocoder.on('result', function(e) {
+                const placeName = e.result.text;
+                const coordinates = e.result.center;
+
+                document.getElementById('city').value = placeName;
+                document.getElementById('longitude').value = coordinates[0];
+                document.getElementById('latitude').value = coordinates[1];
+            });
+
+            geocoder.on('clear', function() {
+                document.getElementById('city').value = '';
+                document.getElementById('longitude').value = '';
+                document.getElementById('latitude').value = '';
+            });
+
+            // Fallback: sync input value directly if user types without clicking dropdown
+            const geocoderInput = document.querySelector('.mapboxgl-ctrl-geocoder--input');
+            if (geocoderInput) {
+                geocoderInput.addEventListener('input', function(e) {
+                    document.getElementById('city').value = e.target.value;
+                });
+
+                // Re-enable suggestions display when user interacts with input
+                geocoderInput.addEventListener('focus', function() {
+                    const suggestions = document.querySelector('.suggestions');
+                    if (suggestions) {
+                        suggestions.style.display = 'block';
+                    }
+                });
+            }
+        });
+    </script>
 </x-layout>
