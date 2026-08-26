@@ -10,97 +10,91 @@
             </a>
         </h1>
 
-        <!-- Desktop Navigation (Right) -->
-        <nav class="hidden md:flex items-center space-x-6 text-sm font-semibold">
+        <!-- Right Side Container (Far Right) -->
+        <div class="flex items-center gap-4">
+            <!-- Desktop Navigation (Authenticated Only) -->
             @auth
-                <x-nav-link url="/" :active="request()->is('/')" icon="house">Home</x-nav-link>
+                <nav class="hidden md:flex items-center space-x-6 text-sm font-semibold">
+                    <x-nav-link url="/" :active="request()->is('/')" icon="house">Home</x-nav-link>
 
-                <x-nav-link url="/games" :active="request()->is('games') && !request()->is('games/create')" icon="compass">All Games</x-nav-link>
+                    <x-nav-link url="/games" :active="request()->is('games') && !request()->is('games/create')" icon="compass">All Games</x-nav-link>
 
-                <x-nav-link url="/bookmarks" :active="request()->is('bookmarks')" icon="bookmark">Saved Games</x-nav-link>
+                    <x-nav-link url="/bookmarks" :active="request()->is('bookmarks')" icon="bookmark">Saved Games</x-nav-link>
 
-                <!-- Dashboard / Profile with Avatar -->
-                <a href="{{ url('/dashboard') }}"
-                    class="inline-flex items-center gap-2 {{ request()->is('dashboard') ? 'text-sky-500 dark:text-sky-400 font-bold' : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white' }} transition-colors">
-                    @if (auth()->user()->avatar)
-                        <img src="{{ asset('storage/' . auth()->user()->avatar) }}" alt="Avatar"
-                            class="w-7 h-7 rounded-full object-cover border {{ request()->is('dashboard') ? 'border-sky-500 ring-2 ring-sky-200 dark:ring-sky-900/50' : 'border-gray-200 dark:border-gray-600' }}">
-                    @else
-                        <i class="fa-solid fa-user text-base"></i>
-                    @endif
-                    <span>Dashboard</span>
-                </a>
+                    <!-- Dashboard / Profile with Avatar -->
+                    <a href="{{ url('/dashboard') }}"
+                        class="inline-flex items-center gap-2 {{ request()->is('dashboard') ? 'text-sky-500 dark:text-sky-400 font-bold' : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white' }} transition-colors">
+                        @if (auth()->user()->avatar)
+                            <img src="{{ asset('storage/' . auth()->user()->avatar) }}" alt="Avatar"
+                                class="w-7 h-7 rounded-full object-cover border {{ request()->is('dashboard') ? 'border-sky-500 ring-2 ring-sky-200 dark:ring-sky-900/50' : 'border-gray-200 dark:border-gray-600' }}">
+                        @else
+                            <i class="fa-solid fa-user text-base"></i>
+                        @endif
+                        <span>Dashboard</span>
+                    </a>
 
-                <div class="h-4 w-px bg-gray-200 dark:bg-gray-700"></div>
+                    <div class="h-4 w-px bg-gray-200 dark:bg-gray-700"></div>
 
-                <!-- Desktop Dark Mode Toggle Button (Authenticated) -->
-                <button onclick="toggleDarkMode()" type="button"
-                    class="p-2 text-gray-500 dark:text-gray-400 hover:text-amber-500 dark:hover:text-amber-400 transition-colors cursor-pointer"
-                    aria-label="Toggle Theme">
-                    <i class="fa-solid fa-sun theme-toggle-sun text-amber-400 text-base"></i>
-                    <i class="fa-solid fa-moon theme-toggle-moon text-base"></i>
-                </button>
-
-                <!-- Desktop Logout Link -->
-                <form method="POST" action="{{ route('logout') }}" class="inline-flex items-center">
-                    @csrf
-                    <button type="submit"
-                        class="inline-flex items-center gap-1.5 text-gray-500 dark:text-gray-400 hover:text-rose-600 dark:hover:text-rose-400 font-medium transition-colors cursor-pointer whitespace-nowrap">
-                        <i class="fa-solid fa-right-from-bracket text-sm"></i>
-                        <span>Logout</span>
+                    <!-- Desktop Dark Mode Toggle Button (Authenticated) -->
+                    <button onclick="toggleDarkMode()" type="button"
+                        class="p-2 text-gray-500 dark:text-gray-400 hover:text-amber-500 dark:hover:text-amber-400 transition-colors cursor-pointer"
+                        aria-label="Toggle Theme">
+                        <i class="fa-solid fa-sun theme-toggle-sun text-amber-400 text-base"></i>
+                        <i class="fa-solid fa-moon theme-toggle-moon text-base"></i>
                     </button>
-                </form>
 
-                <!-- Primary Action Button -->
-                <a href="{{ url('/games/create') }}"
-                    class="inline-flex items-center gap-2 bg-sky-500 hover:bg-sky-600 dark:bg-sky-500 dark:hover:bg-sky-400 text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-sm shadow-sky-500/20 transition-all whitespace-nowrap active:scale-95">
-                    <i class="fa-solid fa-square-plus"></i>
-                    <span>Create Game</span>
-                </a>
+                    <!-- Desktop Logout Link -->
+                    <form method="POST" action="{{ route('logout') }}" class="inline-flex items-center">
+                        @csrf
+                        <button type="submit"
+                            class="inline-flex items-center gap-1.5 text-gray-500 dark:text-gray-400 hover:text-rose-600 dark:hover:text-rose-400 font-medium transition-colors cursor-pointer whitespace-nowrap">
+                            <i class="fa-solid fa-right-from-bracket text-sm"></i>
+                            <span>Logout</span>
+                        </button>
+                    </form>
+
+                    <!-- Primary Action Button -->
+                    <a href="{{ url('/games/create') }}"
+                        class="inline-flex items-center gap-2 bg-sky-500 hover:bg-sky-600 dark:bg-sky-500 dark:hover:bg-sky-400 text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-sm shadow-sky-500/20 transition-all whitespace-nowrap active:scale-95">
+                        <i class="fa-solid fa-square-plus"></i>
+                        <span>Create Game</span>
+                    </a>
+                </nav>
             @else
-                <x-nav-link url="/" :active="request()->is('/')" icon="house">Home</x-nav-link>
-                <x-nav-link url="/games" :active="request()->is('games')" icon="compass">All Games</x-nav-link>
+                <!-- Desktop Dark Mode Toggle Button (Guests Only) -->
+                <button onclick="toggleDarkMode()" type="button"
+                    class="hidden md:block p-2 text-gray-500 dark:text-gray-400 hover:text-amber-500 dark:hover:text-amber-400 transition-colors cursor-pointer"
+                    aria-label="Toggle Theme">
+                    <i class="fa-solid fa-sun theme-toggle-sun text-amber-400 text-base"></i>
+                    <i class="fa-solid fa-moon theme-toggle-moon text-base"></i>
+                </button>
+            @endauth
 
-                <a href="{{ url('/login') }}"
-                    class="text-gray-600 dark:text-gray-300 hover:text-sky-500 transition-colors">Log In</a>
-                <a href="{{ url('/register') }}"
-                    class="px-4 py-2 text-white bg-sky-500 hover:bg-sky-600 rounded-xl transition-colors">Register</a>
-
-                <!-- Dark Mode Toggle Button for Guests -->
+            <!-- Mobile Header Right -->
+            <div class="md:hidden flex items-center gap-2">
                 <button onclick="toggleDarkMode()" type="button"
                     class="p-2 text-gray-500 dark:text-gray-400 hover:text-amber-500 dark:hover:text-amber-400 transition-colors cursor-pointer"
                     aria-label="Toggle Theme">
                     <i class="fa-solid fa-sun theme-toggle-sun text-amber-400 text-base"></i>
                     <i class="fa-solid fa-moon theme-toggle-moon text-base"></i>
                 </button>
-            @endauth
-        </nav>
 
-        <!-- Mobile Header Right -->
-        <div class="md:hidden flex items-center gap-2">
-            <!-- Mobile Dark Mode Toggle Button -->
-            <button onclick="toggleDarkMode()" type="button"
-                class="p-2 text-gray-500 dark:text-gray-400 hover:text-amber-500 dark:hover:text-amber-400 transition-colors cursor-pointer"
-                aria-label="Toggle Theme">
-                <i class="fa-solid fa-sun theme-toggle-sun text-amber-400 text-base"></i>
-                <i class="fa-solid fa-moon theme-toggle-moon text-base"></i>
-            </button>
-
-            @auth
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit"
-                        class="flex items-center gap-1.5 text-xs font-semibold text-rose-500 hover:text-rose-600 dark:text-rose-400 dark:hover:text-rose-300 bg-rose-50 dark:bg-rose-950/40 px-3 py-1.5 rounded-full border border-rose-100 dark:border-rose-900/60 active:scale-95 transition-all">
-                        <i class="fa-solid fa-right-from-bracket"></i>
-                        <span>Logout</span>
-                    </button>
-                </form>
-            @endauth
+                @auth
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit"
+                            class="flex items-center gap-1.5 text-xs font-semibold text-rose-500 hover:text-rose-600 dark:text-rose-400 dark:hover:text-rose-300 bg-rose-50 dark:bg-rose-950/40 px-3 py-1.5 rounded-full border border-rose-100 dark:border-rose-900/60 active:scale-95 transition-all">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            <span>Logout</span>
+                        </button>
+                    </form>
+                @endauth
+            </div>
         </div>
     </div>
 </header>
 
-<!-- Mobile Layout Logic (Bottom Navigation) -->
+<!-- Mobile Layout Logic (Bottom Navigation - Authenticated Only) -->
 @auth
     <!-- Mobile Bottom Navigation Bar -->
     <nav
@@ -134,29 +128,4 @@
         </a>
 
     </nav>
-@else
-    <!-- Floating Mobile Guest Bar -->
-    <div class="md:hidden fixed bottom-4 left-4 right-4 z-50">
-        <div
-            class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md border border-gray-200/80 dark:border-gray-700/80 shadow-2xl rounded-2xl p-3 flex items-center justify-between gap-3">
-            <div class="flex items-center gap-2 pl-2">
-                <div
-                    class="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 flex items-center justify-center text-white text-xs shadow-sm">
-                    <i class="fa-solid fa-users"></i>
-                </div>
-                <span class="text-xs font-bold text-gray-800 dark:text-gray-100">Join TeamUp</span>
-            </div>
-
-            <div class="flex items-center gap-2">
-                <a href="{{ url('/login') }}"
-                    class="px-4 py-2 text-xs font-semibold text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-xl transition-colors">
-                    Log In
-                </a>
-                <a href="{{ url('/register') }}"
-                    class="px-4 py-2 text-xs font-semibold text-white bg-sky-500 hover:bg-sky-600 rounded-xl shadow-sm transition-colors">
-                    Register
-                </a>
-            </div>
-        </div>
-    </div>
 @endauth
