@@ -18,6 +18,7 @@
             border-radius: 0.75rem !important;
             background-color: #F9FAFB !important;
             font-family: inherit !important;
+            transition: background-color 0.2s, border-color 0.2s;
         }
 
         .mapboxgl-ctrl-geocoder--input {
@@ -30,6 +31,37 @@
         .mapboxgl-ctrl-geocoder--icon-search {
             left: 10px !important;
             top: 11px !important;
+            fill: #9CA3AF !important;
+        }
+
+        /* Dark Mode adjustments for Mapbox Geocoder */
+        .dark .mapboxgl-ctrl-geocoder {
+            background-color: #374151 !important;
+            border-color: #4B5563 !important;
+        }
+
+        .dark .mapboxgl-ctrl-geocoder--input {
+            color: #F9FAFB !important;
+        }
+
+        .dark .mapboxgl-ctrl-geocoder--input::placeholder {
+            color: #9CA3AF !important;
+        }
+
+        .dark .suggestions-wrapper,
+        .dark .mapboxgl-ctrl-geocoder .suggestions {
+            background-color: #1F2937 !important;
+            border-color: #374151 !important;
+        }
+
+        .dark .mapboxgl-ctrl-geocoder .suggestions>li>a {
+            color: #E5E7EB !important;
+        }
+
+        .dark .mapboxgl-ctrl-geocoder .suggestions>.active>a,
+        .dark .mapboxgl-ctrl-geocoder .suggestions>li>a:hover {
+            background-color: #374151 !important;
+            color: #38BDF8 !important;
         }
     </style>
 
@@ -37,14 +69,16 @@
         <section class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
 
             <!-- Profile Info Form -->
-            <div class="bg-white border border-gray-100 p-6 sm:p-8 rounded-3xl shadow-sm space-y-6">
+            <div
+                class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/80 p-6 sm:p-8 rounded-3xl shadow-sm space-y-6 transition-colors">
                 <div>
-                    <h3 class="text-xl font-extrabold text-gray-900 tracking-tight flex items-center gap-2">
-                        <i class="fa-solid fa-user-pen text-sky-500"></i>
+                    <h3
+                        class="text-xl font-extrabold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
+                        <i class="fa-solid fa-user-pen text-sky-500 dark:text-sky-400"></i>
                         <span>Profile Info</span>
                     </h3>
 
-                    <p class="text-gray-500 text-xs mt-1">
+                    <p class="text-gray-500 dark:text-gray-400 text-xs mt-1">
                         Update your account details, location, and profile picture.
                     </p>
                 </div>
@@ -55,11 +89,11 @@
                     @method('PUT')
 
                     <!-- Avatar Preview & Upload -->
-                    <div class="flex items-center gap-4 py-2 border-b border-gray-50 pb-4">
+                    <div class="flex items-center gap-4 py-2 border-b border-gray-100 dark:border-gray-700/60 pb-4">
                         @if (auth()->user()->avatar)
                             <div class="relative">
                                 <img src="{{ asset('storage/' . auth()->user()->avatar) }}" alt="Profile Avatar"
-                                    class="w-16 h-16 rounded-2xl object-cover border-2 border-sky-100 shadow-sm">
+                                    class="w-16 h-16 rounded-2xl object-cover border-2 border-sky-100 dark:border-sky-900/50 shadow-sm">
                             </div>
                         @endif
 
@@ -77,10 +111,11 @@
 
                     <!-- Location Field (Mapbox Geocoder) -->
                     <div class="space-y-1">
-                        <label class="block text-xs font-medium text-gray-600">Location / City</label>
+                        <label class="block text-xs font-medium text-gray-600 dark:text-gray-300">Location /
+                            City</label>
                         <div id="geocoder-container"></div>
                         @error('city')
-                            <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                            <p class="text-xs text-red-500 dark:text-rose-400 mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
@@ -95,7 +130,7 @@
                     <!-- Submit Button -->
                     <div class="pt-2">
                         <button type="submit"
-                            class="w-full py-3 px-5 bg-sky-500 hover:bg-sky-600 text-white text-xs font-semibold rounded-2xl shadow-md shadow-sky-500/20 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer">
+                            class="w-full py-3 px-5 bg-sky-500 hover:bg-sky-600 dark:bg-sky-500 dark:hover:bg-sky-400 text-white text-xs font-semibold rounded-2xl shadow-md shadow-sky-500/20 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer">
                             <i class="fa-solid fa-floppy-disk"></i>
                             <span>Save Changes</span>
                         </button>
@@ -108,20 +143,21 @@
 
                 <!-- Page Header -->
                 <div
-                    class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white border border-gray-100 p-6 rounded-3xl shadow-sm">
+                    class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/80 p-6 rounded-3xl shadow-sm transition-colors">
                     <div>
-                        <h3 class="text-2xl font-extrabold text-gray-900 tracking-tight flex items-center gap-2">
-                            <i class="fa-solid fa-list-check text-sky-500"></i>
+                        <h3
+                            class="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
+                            <i class="fa-solid fa-list-check text-sky-500 dark:text-sky-400"></i>
                             <span>My Game Listings</span>
                         </h3>
 
-                        <p class="text-gray-500 text-xs sm:text-sm mt-1">
+                        <p class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm mt-1">
                             Manage and track all the matches you have created.
                         </p>
                     </div>
 
                     <a href="{{ route('games.create') }}"
-                        class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-sky-500 hover:bg-sky-600 text-white text-xs font-semibold rounded-2xl shadow-md shadow-sky-500/20 active:scale-95 transition-all">
+                        class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-sky-500 hover:bg-sky-600 dark:bg-sky-500 dark:hover:bg-sky-400 text-white text-xs font-semibold rounded-2xl shadow-md shadow-sky-500/20 active:scale-95 transition-all whitespace-nowrap">
                         <i class="fa-solid fa-plus"></i>
                         <span>Create New Game</span>
                     </a>
@@ -132,7 +168,7 @@
 
                     @forelse($games as $game)
                         <div
-                            class="bg-white border border-gray-100 hover:border-gray-200 rounded-2xl p-5 shadow-sm transition-all space-y-4">
+                            class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/70 hover:border-gray-200 dark:hover:border-gray-600 rounded-2xl p-5 shadow-sm transition-all space-y-4">
 
                             <!-- Top Section: Game Details & Actions -->
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -142,28 +178,30 @@
 
                                     <div class="flex items-center gap-2 flex-wrap">
                                         <span
-                                            class="px-2.5 py-1 bg-sky-50 text-sky-700 border border-sky-100 rounded-lg text-xs font-bold uppercase tracking-wider">
+                                            class="px-2.5 py-1 bg-sky-50 dark:bg-sky-950/50 text-sky-700 dark:text-sky-300 border border-sky-100 dark:border-sky-800/60 rounded-lg text-xs font-bold uppercase tracking-wider">
                                             {{ $game->game_type ?? 'Match' }}
                                         </span>
 
-                                        <h4 class="text-base font-bold text-gray-900">
+                                        <h4 class="text-base font-bold text-gray-900 dark:text-white">
                                             {{ $game->title }}
                                         </h4>
                                     </div>
 
                                     <!-- Info Pills -->
-                                    <div class="flex items-center gap-4 text-xs text-gray-500 flex-wrap">
+                                    <div
+                                        class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400 flex-wrap">
 
                                         @if (isset($game->city) || isset($game->exact_location))
                                             <span class="flex items-center gap-1">
-                                                <i class="fa-solid fa-location-dot text-rose-500"></i>
+                                                <i
+                                                    class="fa-solid fa-location-dot text-rose-500 dark:text-rose-400"></i>
                                                 {{ $game->city ?? $game->exact_location }}
                                             </span>
                                         @endif
 
                                         @if (isset($game->created_at))
                                             <span class="flex items-center gap-1">
-                                                <i class="fa-solid fa-calendar text-gray-400"></i>
+                                                <i class="fa-solid fa-calendar text-gray-400 dark:text-gray-500"></i>
                                                 {{ $game->created_at->format('d M Y') }}
                                             </span>
                                         @endif
@@ -173,16 +211,16 @@
 
                                 <!-- Actions -->
                                 <div
-                                    class="flex items-center gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-gray-100 justify-end">
+                                    class="flex items-center gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-gray-100 dark:border-gray-700/60 justify-end">
                                     <a href="{{ route('games.show', $game) }}"
-                                        class="px-3 py-2 text-xs font-semibold text-gray-600 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors flex items-center gap-1.5">
-                                        <i class="fa-solid fa-eye text-gray-400"></i>
+                                        class="px-3 py-2 text-xs font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors flex items-center gap-1.5">
+                                        <i class="fa-solid fa-eye text-gray-400 dark:text-gray-400"></i>
                                         <span>View</span>
                                     </a>
 
                                     @if (Route::has('games.edit'))
                                         <a href="{{ route('games.edit', $game) }}"
-                                            class="px-3 py-2 text-xs font-semibold text-sky-600 hover:text-sky-700 bg-sky-50 hover:bg-sky-100 rounded-xl transition-colors flex items-center gap-1.5">
+                                            class="px-3 py-2 text-xs font-semibold text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 bg-sky-50 dark:bg-sky-950/40 hover:bg-sky-100 dark:hover:bg-sky-900/50 rounded-xl transition-colors flex items-center gap-1.5">
                                             <i class="fa-solid fa-pen-to-square"></i>
                                             <span>Edit</span>
                                         </a>
@@ -196,7 +234,7 @@
                                             @method('DELETE')
 
                                             <button type="submit"
-                                                class="px-3 py-2 text-xs font-semibold text-rose-600 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer">
+                                                class="px-3 py-2 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/50 rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer">
                                                 <i class="fa-solid fa-trash-can"></i>
                                                 <span>Delete</span>
                                             </button>
@@ -213,24 +251,25 @@
                     @empty
 
                         <!-- Empty State -->
-                        <div class="bg-white border border-gray-100 rounded-3xl p-10 text-center space-y-4 shadow-sm">
+                        <div
+                            class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/80 rounded-3xl p-10 text-center space-y-4 shadow-sm transition-colors">
                             <div
-                                class="w-16 h-16 bg-sky-50 text-sky-500 rounded-full flex items-center justify-center mx-auto text-2xl">
+                                class="w-16 h-16 bg-sky-50 dark:bg-sky-950/50 text-sky-500 dark:text-sky-400 rounded-full flex items-center justify-center mx-auto text-2xl">
                                 <i class="fa-solid fa-folder-open"></i>
                             </div>
 
                             <div class="space-y-1">
-                                <h4 class="text-base font-bold text-gray-900">
+                                <h4 class="text-base font-bold text-gray-900 dark:text-white">
                                     No Game Listings Found
                                 </h4>
 
-                                <p class="text-gray-500 text-xs sm:text-sm max-w-sm mx-auto">
+                                <p class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm max-w-sm mx-auto">
                                     You haven't created any matches yet. Start organizing your first game now!
                                 </p>
                             </div>
 
                             <a href="{{ route('games.create') }}"
-                                class="inline-flex items-center gap-2 px-5 py-2.5 bg-sky-500 hover:bg-sky-600 text-white text-xs font-semibold rounded-2xl shadow-md shadow-sky-500/20 active:scale-95 transition-all">
+                                class="inline-flex items-center gap-2 px-5 py-2.5 bg-sky-500 hover:bg-sky-600 dark:bg-sky-500 dark:hover:bg-sky-400 text-white text-xs font-semibold rounded-2xl shadow-md shadow-sky-500/20 active:scale-95 transition-all">
                                 <i class="fa-solid fa-plus"></i>
                                 <span>Create Your First Game</span>
                             </a>

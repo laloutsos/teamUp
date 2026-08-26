@@ -3,16 +3,18 @@
 
     <div class="max-w-2xl mx-auto px-4 py-8">
         <!-- Instagram Card Container -->
-        <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+        <div
+            class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/80 rounded-xl shadow-sm overflow-hidden transition-colors">
 
             <!-- Header Bar -->
-            <div class="flex items-center justify-between p-4 border-b border-gray-100 bg-gray-50/50">
+            <div
+                class="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-700/60 bg-gray-50/50 dark:bg-gray-800/50">
                 <a href="{{ route('games.index') }}"
-                    class="inline-flex items-center gap-2 text-xs font-semibold text-gray-600 hover:text-sky-500 transition-colors">
+                    class="inline-flex items-center gap-2 text-xs font-semibold text-gray-600 dark:text-gray-300 hover:text-sky-500 dark:hover:text-sky-400 transition-colors">
                     <i class="fa-solid fa-chevron-left"></i>
                     <span>Back</span>
                 </a>
-                <h1 class="text-base font-bold text-gray-900">Create New Game</h1>
+                <h1 class="text-base font-bold text-gray-900 dark:text-white">Create New Game</h1>
                 <div class="w-8"></div> <!-- Spacer for visual balance -->
             </div>
 
@@ -23,8 +25,8 @@
                 <!-- Section: Game Details -->
                 <div class="space-y-4">
                     <div
-                        class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-400 pb-1 border-b border-gray-100">
-                        <i class="fa-solid fa-gamepad text-sky-500"></i>
+                        class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-400 pb-1 border-b border-gray-100 dark:border-gray-700/60">
+                        <i class="fa-solid fa-gamepad text-sky-500 dark:text-sky-400"></i>
                         <span>Game Details</span>
                     </div>
 
@@ -35,7 +37,6 @@
                     <!-- Description -->
                     <x-inputs.text-area id="description" name="description" label="Description"
                         placeholder="Looking for a friendly match..." />
-
 
                     <!-- Game Type & Bet Amount (Grid) -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -49,7 +50,6 @@
                                 'Other' => 'Other',
                             ]" />
 
-
                         <x-inputs.text id="bet" name="bet" label="Bet Amount (€)" type="number"
                             placeholder="0" />
 
@@ -62,7 +62,6 @@
                             1 => 'Yes',
                         ]" />
 
-
                     <!-- Tags -->
                     <x-inputs.text id="tags" name="tags" label="Tags (comma-separated)"
                         placeholder="outdoor, 5v5, night-game, beginner-friendly" />
@@ -72,8 +71,8 @@
                 <!-- Section: Location & Contact -->
                 <div class="space-y-4 pt-2">
                     <div
-                        class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-400 pb-1 border-b border-gray-100">
-                        <i class="fa-solid fa-location-dot text-sky-500"></i>
+                        class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-400 pb-1 border-b border-gray-100 dark:border-gray-700/60">
+                        <i class="fa-solid fa-location-dot text-sky-500 dark:text-sky-400"></i>
                         <span>Location & Contact</span>
                     </div>
 
@@ -86,11 +85,12 @@
 
                     <!-- Contact Email -->
                     <div>
-                        <label class="block text-xs font-semibold text-gray-700 mb-1" for="contact_email">
+                        <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1"
+                            for="contact_email">
                             Contact Email
                         </label>
                         <input id="contact_email" type="email" name="contact_email" value="{{ old('contact_email') }}"
-                            class="w-full px-3.5 py-2 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 transition-all placeholder:text-gray-400"
+                            class="w-full px-3.5 py-2 text-sm bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:bg-white dark:focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 dark:focus:border-sky-400 transition-all placeholder:text-gray-400 dark:placeholder:text-gray-400"
                             placeholder="organizer@example.com" />
                     </div>
 
@@ -101,12 +101,11 @@
 
                 </div>
 
-
                 <!-- Section: Team Details -->
                 <div class="space-y-4 pt-2">
                     <div
-                        class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-400 pb-1 border-b border-gray-100">
-                        <i class="fa-solid fa-users text-sky-500"></i>
+                        class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-400 pb-1 border-b border-gray-100 dark:border-gray-700/60">
+                        <i class="fa-solid fa-users text-sky-500 dark:text-sky-400"></i>
                         <span>Team Information</span>
                     </div>
 
@@ -124,21 +123,22 @@
 
                     <!-- Team Logo Upload -->
                     <div>
-                        <label class="block text-xs font-semibold text-gray-700 mb-1" for="team_logo">
+                        <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1"
+                            for="team_logo">
                             Team Logo
                         </label>
                         <input id="team_logo" type="file" name="team_logo"
-                            class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100" />
+                            class="w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-sky-50 dark:file:bg-sky-950/60 file:text-sky-700 dark:file:text-sky-300 hover:file:bg-sky-100 dark:hover:file:bg-sky-900/60 cursor-pointer" />
                         @error('team_logo')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            <p class="text-red-500 dark:text-rose-400 text-xs mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
 
                 <!-- Submit Button -->
-                <div class="pt-4 border-t border-gray-100">
+                <div class="pt-4 border-t border-gray-100 dark:border-gray-700/60">
                     <button type="submit"
-                        class="w-full py-2.5 px-4 bg-sky-500 hover:bg-sky-600 active:bg-sky-700 text-white text-sm font-semibold rounded-xl transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500/50">
+                        class="w-full py-2.5 px-4 bg-sky-500 hover:bg-sky-600 dark:bg-sky-500 dark:hover:bg-sky-400 active:bg-sky-700 text-white text-sm font-semibold rounded-xl transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500/50 cursor-pointer">
                         Submit
                     </button>
                 </div>

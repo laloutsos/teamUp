@@ -1,77 +1,65 @@
 @props(['game'])
 
 <div
-    class="max-w-md w-full bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden text-sm flex flex-col justify-between h-full">
-    <!-- Top & Middle Content Container -->
-    <div class="flex flex-col flex-grow">
-        <!-- Header Card -->
-        <div class="flex items-center justify-between p-3 border-b border-gray-100">
-            <div class="flex items-center gap-3">
-                @if ($game->team_logo)
-                    <div
-                        class="w-10 h-10 rounded-full p-[2px] bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 flex-shrink-0">
-                        <img src="/storage/{{ $game->team_logo }}" alt="{{ $game->team_name }}"
-                            class="w-full h-full object-cover rounded-full bg-white p-0.5" />
-                    </div>
-                @endif
-                <div>
-                    <h2 class="font-semibold text-gray-900 leading-tight text-base">
-                        {{ $game->title }}
-                    </h2>
-                    <p class="text-xs text-gray-500 font-normal">{{ $game->game_type }}</p>
-                </div>
-            </div>
+    class="w-full bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/60 shadow-sm hover:shadow transition-all flex flex-col justify-between rounded-2xl sm:rounded-xl p-0 sm:p-3.5 overflow-hidden">
 
-            <!-- Badge Competitive / Not Competitive -->
-            <div class="flex-shrink-0">
-                @if ($game->competitive)
-                    <span
-                        class="text-[11px] font-semibold bg-red-50 text-red-600 border border-red-200 rounded-full px-2.5 py-0.5">
-                        Competitive
-                    </span>
-                @else
-                    <span
-                        class="text-[11px] font-semibold bg-emerald-50 text-emerald-600 border border-emerald-200 rounded-full px-2.5 py-0.5">
-                        Not Competitive
-                    </span>
-                @endif
+    <!-- Header (Instagram Style on Mobile) -->
+    <div
+        class="flex items-center justify-between p-3 sm:p-0 sm:pb-2 border-b sm:border-b-0 border-gray-50 dark:border-gray-700/40">
+        <div class="flex items-center gap-2.5 min-w-0">
+            @if ($game->team_logo)
+                <!-- Gradient Ring like Instagram Stories on Mobile -->
+                <div
+                    class="p-[1.5px] bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 rounded-full shrink-0 sm:bg-none sm:p-0">
+                    <img src="/storage/{{ $game->team_logo }}" alt="{{ $game->team_name }}"
+                        class="w-8 h-8 rounded-full object-cover bg-white dark:bg-gray-800 p-0.5 sm:p-0" />
+                </div>
+            @else
+                <div
+                    class="w-8 h-8 rounded-full sm:rounded-lg bg-sky-50 dark:bg-sky-950 text-sky-500 flex items-center justify-center shrink-0 font-bold text-xs ring-2 ring-rose-500/30 sm:ring-0">
+                    ⚽
+                </div>
+            @endif
+            <div class="min-w-0">
+                <h3 class="font-bold text-gray-900 dark:text-white text-xs sm:text-sm truncate">
+                    {{ $game->title }}
+                </h3>
+                <p class="text-[10px] text-gray-400 font-medium uppercase tracking-wider">{{ $game->game_type }}</p>
             </div>
         </div>
 
-        <!-- Body Content -->
-        <div class="p-4 space-y-3 flex-grow flex flex-col justify-between">
-            <!-- Description -->
-            <p class="text-gray-800 leading-relaxed">
-                {{-- <span class="font-semibold text-gray-900 mr-1">{{ $game->title }}</span> --}}
-                {{ Str::limit($game->description, 100) }}
-            </p>
+        <!-- Compact Badge -->
+        <span
+            class="text-[10px] font-bold px-2 py-0.5 rounded-full sm:rounded-md shrink-0 {{ $game->competitive ? 'bg-rose-50 text-rose-600 dark:bg-rose-950/50 dark:text-rose-400' : 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400' }}">
+            {{ $game->competitive ? 'Competitive' : 'Casual' }}
+        </span>
+    </div>
 
-            <!-- Metadata Details -->
-            <div class="pt-2 border-t border-gray-100 space-y-1.5 text-xs text-gray-600 mt-auto">
-                <div class="flex items-center gap-1.5">
-                    <span class="font-semibold text-gray-900">Bet:</span>
-                    <span class="font-bold text-gray-900">{{ number_format($game->bet) }}€</span>
-                </div>
+    <!-- Description (Main Content Body) -->
+    <div class="p-3 sm:p-0 sm:py-2 space-y-2">
+        <p class="text-xs text-gray-700 dark:text-gray-300 line-clamp-2 leading-relaxed">
+            <span class="font-bold text-gray-900 dark:text-white sm:hidden">{{ $game->team_name ?? 'Match' }}</span>
+            {{ $game->description }}
+        </p>
 
-                <div class="flex items-center gap-1.5">
-                    <span class="font-semibold text-gray-900">Location:</span>
-                    <span>{{ $game->city }}, {{ $game->exact_location }}</span>
-                </div>
-                @if ($game->tags)
-                    <div class="flex items-start gap-1.5">
-                        <span class="font-semibold text-gray-900">Tags:</span>
-                        <span class="text-sky-600 font-medium">{{ $game->tags }}</span>
-                    </div>
-                @endif
+        <!-- Location & Price Info Bar (Instagram Post Meta Style) -->
+        <div class="flex items-center justify-between text-[11px] text-gray-500 pt-1">
+            <div class="flex items-center gap-1 truncate max-w-[65%] text-gray-600 dark:text-gray-400 font-medium">
+                <i class="fa-solid fa-location-dot text-rose-500 sm:text-sky-500 text-[11px]"></i>
+                <span class="truncate">{{ $game->city }}</span>
+            </div>
+
+            <div class="font-extrabold text-gray-900 dark:text-white text-xs sm:text-sm">
+                {{ number_format($game->bet) }}€
             </div>
         </div>
     </div>
 
-    <!-- Action Button (Pinned to Bottom) -->
-    <div class="p-4 pt-0">
+    <!-- Action Link (Full Width Button on Mobile) -->
+    <div class="p-3 pt-0 sm:p-0">
         <a href="{{ route('games.show', $game->id) }}"
-            class="block w-full text-center px-4 py-2 rounded-lg text-sm font-semibold text-white bg-sky-500 hover:bg-sky-600 active:bg-sky-700 transition-colors shadow-none">
-            Details
+            class="w-full py-2 sm:py-1.5 text-center text-xs font-bold text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-950/40 hover:bg-sky-100 dark:hover:bg-sky-900/50 rounded-xl sm:rounded-lg transition-colors block">
+            View Match
         </a>
     </div>
 </div>

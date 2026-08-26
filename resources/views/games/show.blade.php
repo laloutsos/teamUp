@@ -7,7 +7,7 @@
             <!-- Flash Session Notifications -->
             @if (session('error'))
                 <div
-                    class="p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-xs font-semibold flex items-center gap-2">
+                    class="p-4 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 rounded-xl text-red-700 dark:text-red-300 text-xs font-semibold flex items-center gap-2">
                     <i class="fa-solid fa-triangle-exclamation text-base"></i>
                     <span>{{ session('error') }}</span>
                 </div>
@@ -15,17 +15,19 @@
 
             @if (session('success'))
                 <div
-                    class="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-700 text-xs font-semibold flex items-center gap-2">
+                    class="p-4 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 rounded-xl text-emerald-700 dark:text-emerald-300 text-xs font-semibold flex items-center gap-2">
                     <i class="fa-solid fa-circle-check text-base"></i>
                     <span>{{ session('success') }}</span>
                 </div>
             @endif
 
             <!-- Game Details Post Card -->
-            <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden text-sm">
+            <div
+                class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/80 rounded-xl shadow-sm overflow-hidden text-sm transition-colors">
                 <!-- Navigation & Actions Bar -->
-                <div class="flex justify-between items-center p-3 border-b border-gray-100">
-                    <a class="inline-flex items-center gap-2 font-medium text-gray-700 hover:text-sky-500 transition-colors"
+                <div
+                    class="flex justify-between items-center p-3 border-b border-gray-100 dark:border-gray-700/60 bg-gray-50/50 dark:bg-gray-800/50">
+                    <a class="inline-flex items-center gap-2 font-medium text-gray-700 dark:text-gray-300 hover:text-sky-500 dark:hover:text-sky-400 transition-colors"
                         href="{{ route('games.index') }}">
                         <i class="fa-solid fa-chevron-left text-xs"></i>
                         <span>Back To Available Games</span>
@@ -35,7 +37,7 @@
                     @can('update', $game)
                         <div class="flex items-center gap-2">
                             <a href="{{ route('games.edit', $game->id) }}"
-                                class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-semibold rounded-lg transition-colors">
+                                class="px-3 py-1.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 text-xs font-semibold rounded-lg transition-colors">
                                 Edit
                             </a>
 
@@ -45,7 +47,7 @@
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit"
-                                    class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 text-xs font-semibold rounded-lg border border-red-200 transition-colors">
+                                    class="px-3 py-1.5 bg-red-50 dark:bg-red-950/50 hover:bg-red-100 dark:hover:bg-red-900/60 text-red-600 dark:text-red-400 text-xs font-semibold rounded-lg border border-red-200 dark:border-red-900/60 transition-colors cursor-pointer">
                                     Delete
                                 </button>
                             </form>
@@ -56,50 +58,54 @@
                 <!-- Post Body -->
                 <div class="p-5 space-y-4">
                     <div class="flex items-start justify-between gap-4">
-                        <h2 class="text-xl font-bold text-gray-900 leading-tight">
+                        <h2 class="text-xl font-bold text-gray-900 dark:text-white leading-tight">
                             {{ $game->title }}
                         </h2>
 
                         <!-- Badge -->
                         @if ($game->competitive)
                             <span
-                                class="text-xs font-semibold bg-red-50 text-red-600 border border-red-200 rounded-full px-3 py-1 flex-shrink-0">
+                                class="text-xs font-semibold bg-red-50 dark:bg-red-950/50 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/60 rounded-full px-3 py-1 flex-shrink-0">
                                 Competitive
                             </span>
                         @else
                             <span
-                                class="text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-200 rounded-full px-3 py-1 flex-shrink-0">
+                                class="text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900/60 rounded-full px-3 py-1 flex-shrink-0">
                                 Not Competitive
                             </span>
                         @endif
                     </div>
 
-                    <p class="text-gray-800 leading-relaxed text-base">
+                    <p class="text-gray-800 dark:text-gray-200 leading-relaxed text-base">
                         {{ $game->description }}
                     </p>
 
                     <!-- Info Box -->
-                    <div class="bg-gray-50 border border-gray-100 rounded-xl p-4 space-y-2 text-xs text-gray-700">
+                    <div
+                        class="bg-gray-50 dark:bg-gray-900/50 border border-gray-100 dark:border-gray-700/60 rounded-xl p-4 space-y-2 text-xs text-gray-700 dark:text-gray-300">
                         <div class="flex items-center gap-2">
-                            <span class="font-semibold text-gray-900 w-24">Game Type:</span>
-                            <span class="text-gray-800 font-medium">{{ $game->game_type }}</span>
+                            <span class="font-semibold text-gray-900 dark:text-white w-24">Game Type:</span>
+                            <span class="text-gray-800 dark:text-gray-200 font-medium">{{ $game->game_type }}</span>
                         </div>
 
                         <div class="flex items-center gap-2">
-                            <span class="font-semibold text-gray-900 w-24">Bet Amount:</span>
-                            <span class="font-bold text-gray-900 text-sm">{{ number_format($game->bet) }}€</span>
+                            <span class="font-semibold text-gray-900 dark:text-white w-24">Bet Amount:</span>
+                            <span
+                                class="font-bold text-gray-900 dark:text-white text-sm">{{ number_format($game->bet) }}€</span>
                         </div>
 
                         <div class="flex items-center gap-2">
-                            <span class="font-semibold text-gray-900 w-24">Location:</span>
-                            <span class="text-gray-800">{{ $game->city }}, {{ $game->exact_location }}</span>
+                            <span class="font-semibold text-gray-900 dark:text-white w-24">Location:</span>
+                            <span class="text-gray-800 dark:text-gray-200">{{ $game->city }},
+                                {{ $game->exact_location }}</span>
                         </div>
 
                         @if ($game->tags)
-                            <div class="flex items-start gap-2 pt-1 border-t border-gray-200/60">
-                                <span class="font-semibold text-gray-900 w-24">Tags:</span>
+                            <div
+                                class="flex items-start gap-2 pt-1 border-t border-gray-200/60 dark:border-gray-700/60">
+                                <span class="font-semibold text-gray-900 dark:text-white w-24">Tags:</span>
                                 <span
-                                    class="text-sky-600 font-medium">{{ ucwords(str_replace(',', ', ', $game->tags)) }}</span>
+                                    class="text-sky-600 dark:text-sky-400 font-medium">{{ ucwords(str_replace(',', ', ', $game->tags)) }}</span>
                             </div>
                         @endif
                     </div>
@@ -107,20 +113,21 @@
             </div>
 
             <!-- More Info & Arrange Section -->
-            <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 space-y-4">
-                <h3 class="text-base font-bold text-gray-900 flex items-center gap-2">
-                    <i class="fa-solid fa-circle-info text-sky-500"></i>
+            <div
+                class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/80 rounded-xl shadow-sm p-5 space-y-4 transition-colors">
+                <h3 class="text-base font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-circle-info text-sky-500 dark:text-sky-400"></i>
                     <span>More Information</span>
                 </h3>
 
-                <p class="text-gray-700 text-sm leading-relaxed">
+                <p class="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
                     {{ $game->more_information ?? 'No additional information provided.' }}
                 </p>
 
                 <!-- Arrange Action Area -->
-                <div class="pt-4 border-t border-gray-100 space-y-3" x-data="{ open: false }">
+                <div class="pt-4 border-t border-gray-100 dark:border-gray-700/60 space-y-3" x-data="{ open: false }">
 
-                    <p class="text-xs text-gray-500">
+                    <p class="text-xs text-gray-500 dark:text-gray-400">
                         Send an application or contact the organizer directly regarding this match.
                     </p>
 
@@ -138,14 +145,14 @@
                         @if ($hasApplied)
                             <!-- Already Applied Button -->
                             <button type="button" disabled
-                                class="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-500 bg-gray-100 border border-gray-200 cursor-not-allowed flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                                class="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700/60 border border-gray-200 dark:border-gray-600 cursor-not-allowed flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-circle-check text-emerald-600 dark:text-emerald-400"></i>
                                 <span>Already Applied</span>
                             </button>
                         @else
                             <!-- Arrange / Apply Button -->
                             <button @click="open = true" type="button"
-                                class="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-sky-500 hover:bg-sky-600 active:bg-sky-700 transition-colors flex items-center justify-center gap-2 shadow-sm">
+                                class="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-sky-500 hover:bg-sky-600 dark:bg-sky-500 dark:hover:bg-sky-400 active:bg-sky-700 transition-colors flex items-center justify-center gap-2 shadow-sm cursor-pointer">
                                 <i class="fa-solid fa-paper-plane"></i>
                                 <span>Arrange Now</span>
                             </button>
@@ -153,7 +160,7 @@
 
                         <!-- Direct Email Button -->
                         <a href="mailto:{{ $game->contact_email }}?subject=Game%20Arrangement:%20{{ urlencode($game->title) }}"
-                            class="px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 border border-gray-200">
+                            class="px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors flex items-center justify-center gap-2 border border-gray-200 dark:border-gray-600">
                             <i class="fa-regular fa-envelope"></i>
                             <span>Send Email</span>
                         </a>
@@ -165,28 +172,29 @@
                             x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
                             x-transition:leave="transition ease-in duration-150"
                             x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
-                            class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-gray-900/50 backdrop-blur-sm overflow-y-auto">
+                            class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-gray-900/60 dark:bg-black/70 backdrop-blur-sm overflow-y-auto">
 
                             <!-- Responsive Modal Container -->
                             <div @click.away="open = false"
-                                class="bg-white rounded-2xl max-w-lg w-full p-4 sm:p-6 shadow-xl space-y-4 text-left border border-gray-100 my-auto max-h-[90vh] overflow-y-auto">
+                                class="bg-white dark:bg-gray-800 rounded-2xl max-w-lg w-full p-4 sm:p-6 shadow-xl space-y-4 text-left border border-gray-100 dark:border-gray-700 my-auto max-h-[90vh] overflow-y-auto">
 
                                 <!-- Modal Header -->
                                 <div
-                                    class="flex items-center justify-between border-b border-gray-100 pb-3 sticky top-0 bg-white z-10">
-                                    <h3 class="text-base sm:text-lg font-bold text-gray-900 flex items-center gap-2">
-                                        <i class="fa-solid fa-trophy text-sky-500"></i>
+                                    class="flex items-center justify-between border-b border-gray-100 dark:border-gray-700 pb-3 sticky top-0 bg-white dark:bg-gray-800 z-10">
+                                    <h3
+                                        class="text-base sm:text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                                        <i class="fa-solid fa-trophy text-sky-500 dark:text-sky-400"></i>
                                         <span>Arrange Match Application</span>
                                     </h3>
                                     <button @click="open = false" type="button"
-                                        class="text-gray-400 hover:text-gray-600 p-1 rounded-lg transition-colors">
+                                        class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1 rounded-lg transition-colors cursor-pointer">
                                         <i class="fa-solid fa-xmark text-lg"></i>
                                     </button>
                                 </div>
 
-                                <p class="text-xs text-gray-600">
+                                <p class="text-xs text-gray-600 dark:text-gray-300">
                                     Submit your details to apply for this game with <strong
-                                        class="text-gray-900">{{ $game->team_name ?? 'the organizer' }}</strong>.
+                                        class="text-gray-900 dark:text-white">{{ $game->team_name ?? 'the organizer' }}</strong>.
                                 </p>
 
                                 <!-- Applicant Form using Custom Components -->
@@ -223,13 +231,13 @@
 
                                     <!-- Action Buttons -->
                                     <div
-                                        class="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-3 border-t border-gray-100">
+                                        class="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-3 border-t border-gray-100 dark:border-gray-700">
                                         <button @click="open = false" type="button"
-                                            class="w-full sm:w-auto px-4 py-2.5 sm:py-2 rounded-xl text-xs font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 transition-colors">
+                                            class="w-full sm:w-auto px-4 py-2.5 sm:py-2 rounded-xl text-xs font-semibold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors cursor-pointer">
                                             Cancel
                                         </button>
                                         <button type="submit"
-                                            class="w-full sm:w-auto px-5 py-2.5 sm:py-2 rounded-xl text-xs font-semibold text-white bg-sky-500 hover:bg-sky-600 transition-colors flex items-center justify-center gap-1.5 shadow-sm">
+                                            class="w-full sm:w-auto px-5 py-2.5 sm:py-2 rounded-xl text-xs font-semibold text-white bg-sky-500 hover:bg-sky-600 dark:bg-sky-500 dark:hover:bg-sky-400 transition-colors flex items-center justify-center gap-1.5 shadow-sm cursor-pointer">
                                             <i class="fa-solid fa-paper-plane"></i>
                                             <span>Submit Application</span>
                                         </button>
@@ -244,38 +252,43 @@
             </div>
 
             <!-- Map Container -->
-            <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-4">
-                <div id="map" class="w-full h-64 rounded-lg bg-gray-100"></div>
+            <div
+                class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/80 rounded-xl shadow-sm p-4 transition-colors">
+                <div id="map"
+                    class="w-full h-64 rounded-lg bg-gray-100 dark:bg-gray-900 border border-gray-200/50 dark:border-gray-700/50">
+                </div>
             </div>
         </section>
 
         <!-- Sidebar / Team Info -->
         <aside class="order-2 md:col-span-1 space-y-4">
-            <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5 text-center space-y-4">
+            <div
+                class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/80 rounded-xl shadow-sm p-5 text-center space-y-4 transition-colors">
 
                 <!-- Team Logo Profile -->
                 <div
                     class="w-20 h-20 rounded-full p-[2px] bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 mx-auto shadow-sm">
                     <img src="{{ $game->team_logo ? asset('storage/' . $game->team_logo) : asset('images/default-team.png') }}"
                         alt="{{ $game->team_name ?? 'Team Logo' }}"
-                        class="w-full h-full object-cover rounded-full bg-white p-0.5" />
+                        class="w-full h-full object-cover rounded-full bg-white dark:bg-gray-800 p-0.5" />
                 </div>
 
                 <!-- Team Info -->
                 <div class="space-y-1">
                     <div class="flex items-center justify-center gap-1.5">
-                        <h4 class="text-lg font-bold text-gray-900">
+                        <h4 class="text-lg font-bold text-gray-900 dark:text-white">
                             {{ $game->team_name ?? 'Anonymous Team' }}
                         </h4>
-                        <i class="fa-solid fa-circle-check text-sky-500 text-xs" title="Verified Team"></i>
+                        <i class="fa-solid fa-circle-check text-sky-500 dark:text-sky-400 text-xs"
+                            title="Verified Team"></i>
                     </div>
 
                     @if ($game->team_description)
-                        <p class="text-xs text-gray-600 leading-normal px-2">
+                        <p class="text-xs text-gray-600 dark:text-gray-300 leading-normal px-2">
                             {{ $game->team_description }}
                         </p>
                     @else
-                        <p class="text-xs text-gray-400 font-medium italic">
+                        <p class="text-xs text-gray-400 dark:text-gray-400 font-medium italic">
                             No team description available.
                         </p>
                     @endif
@@ -287,7 +300,7 @@
                         @csrf
                         @method('DELETE')
                         <button type="submit"
-                            class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 transition-colors">
+                            class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/40 hover:bg-red-100 dark:hover:bg-red-900/60 border border-red-200 dark:border-red-900/60 transition-colors cursor-pointer">
                             <i class="fa-solid fa-bookmark"></i>
                             <span>Remove Bookmark</span>
                         </button>
@@ -296,7 +309,7 @@
                     <form method="POST" action="{{ route('bookmarks.store', $game->id) }}">
                         @csrf
                         <button type="submit"
-                            class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold text-sky-600 bg-sky-50 hover:bg-sky-100 border border-sky-200 transition-colors">
+                            class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-950/40 hover:bg-sky-100 dark:hover:bg-sky-900/60 border border-sky-200 dark:border-sky-900/60 transition-colors cursor-pointer">
                             <i class="fa-regular fa-bookmark"></i>
                             <span>Bookmark Game</span>
                         </button>
@@ -318,10 +331,14 @@
         // Your Mapbox access token
         mapboxgl.accessToken = "{{ env('MAPBOX_API_KEY') }}";
 
+        // Dynamic Map Theme based on dark mode class on html/document
+        const isDarkMode = document.documentElement.classList.contains('dark');
+        const mapStyle = isDarkMode ? 'mapbox://styles/mapbox/dark-v10' : 'mapbox://styles/mapbox/streets-v11';
+
         // Initialize the map
         const map = new mapboxgl.Map({
             container: 'map',
-            style: 'mapbox://styles/mapbox/streets-v11',
+            style: mapStyle,
             center: [-74.5, 40],
             zoom: 9
         });

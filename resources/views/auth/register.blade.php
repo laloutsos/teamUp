@@ -17,6 +17,7 @@
             border-radius: 0.75rem !important;
             background-color: #F9FAFB !important;
             font-family: inherit !important;
+            transition: all 0.2s ease;
         }
 
         .mapboxgl-ctrl-geocoder--input {
@@ -30,12 +31,45 @@
             left: 10px !important;
             top: 11px !important;
         }
+
+        /* Dark Mode Support for Mapbox Geocoder */
+        .dark .mapboxgl-ctrl-geocoder {
+            background-color: rgba(55, 65, 81, 0.5) !important;
+            border-color: rgba(75, 85, 99, 0.6) !important;
+        }
+
+        .dark .mapboxgl-ctrl-geocoder--input {
+            color: #FFFFFF !important;
+        }
+
+        .dark .mapboxgl-ctrl-geocoder--input::placeholder {
+            color: #9CA3AF !important;
+        }
+
+        .dark .mapboxgl-ctrl-geocoder .suggestions {
+            background-color: #1F2937 !important;
+            border: 1px solid #374151 !important;
+        }
+
+        .dark .mapboxgl-ctrl-geocoder .suggestions>li>a {
+            color: #F3F4F6 !important;
+        }
+
+        .dark .mapboxgl-ctrl-geocoder .suggestions>.active>a,
+        .dark .mapboxgl-ctrl-geocoder .suggestions>li>a:hover {
+            background-color: #374151 !important;
+            color: #38BDF8 !important;
+        }
+
+        .dark .mapboxgl-ctrl-geocoder--icon-search {
+            fill: #9CA3AF !important;
+        }
     </style>
 
     <div class="min-h-[85vh] flex items-center justify-center px-4 py-8">
         <!-- Main Card Container -->
         <div
-            class="bg-white border border-gray-200 rounded-2xl shadow-xl w-full max-w-sm sm:max-w-md p-6 sm:p-8 space-y-6">
+            class="bg-white dark:bg-gray-800/90 border border-gray-100 dark:border-gray-700/60 rounded-2xl shadow-xl dark:shadow-2xl dark:shadow-black/40 w-full max-w-sm sm:max-w-md p-6 sm:p-8 space-y-6 backdrop-blur-sm transition-colors">
 
             <!-- Header Section -->
             <div class="text-center space-y-2">
@@ -44,8 +78,8 @@
                     <i class="fa-solid fa-user-plus"></i>
                 </div>
 
-                <h2 class="text-2xl font-extrabold text-gray-900 tracking-tight">Create Account</h2>
-                <p class="text-xs text-gray-500">Sign up to join matches and build your team</p>
+                <h2 class="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">Create Account</h2>
+                <p class="text-xs text-gray-500 dark:text-gray-400">Sign up to join matches and build your team</p>
             </div>
 
             <!-- Registration Form -->
@@ -62,7 +96,8 @@
 
                 <!-- Location Field (Mapbox Geocoder) -->
                 <div class="space-y-1">
-                    <label class="block text-xs font-medium text-gray-600">Your Location / City</label>
+                    <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300">Your Location /
+                        City</label>
                     <div id="geocoder-container"></div>
                     @error('city')
                         <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
@@ -84,16 +119,17 @@
 
                 <!-- Submit Button -->
                 <button type="submit"
-                    class="w-full py-3 px-4 bg-sky-500 hover:bg-sky-600 active:scale-[0.98] text-white text-sm font-semibold rounded-xl shadow-md transition-all flex items-center justify-center gap-2 mt-2">
+                    class="w-full py-3 px-4 bg-sky-500 hover:bg-sky-600 dark:bg-sky-500 dark:hover:bg-sky-400 active:scale-[0.98] text-white text-sm font-semibold rounded-xl shadow-md shadow-sky-500/20 transition-all flex items-center justify-center gap-2 mt-2">
                     <span>Register</span>
                     <i class="fa-solid fa-arrow-right text-xs"></i>
                 </button>
             </form>
 
             <!-- Footer Link -->
-            <div class="pt-4 border-t border-gray-100 text-center text-xs text-gray-500">
+            <div
+                class="pt-4 border-t border-gray-100 dark:border-gray-700/50 text-center text-xs text-gray-500 dark:text-gray-400">
                 Already have an account?
-                <a class="font-semibold text-sky-600 hover:text-sky-700 ml-1 transition-colors"
+                <a class="font-semibold text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 ml-1 transition-colors"
                     href="{{ route('login') }}">
                     Log In
                 </a>
