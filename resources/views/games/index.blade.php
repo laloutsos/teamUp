@@ -12,22 +12,19 @@
         </div>
     @endif
 
-    <!-- Search & Header Section -->
-    <div
-        class="bg-gradient-to-r from-sky-500 to-blue-600 dark:from-sky-600 dark:to-blue-800 rounded-3xl p-6 md:p-8 mb-6 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-6 text-white">
+    <!-- Search & Header Section (Exact Hero Style) -->
+    <section class="w-full max-w-2xl mx-auto px-4 py-6 sm:py-8 text-center space-y-5 mb-4">
+        <!-- Main Title with Gradient Text -->
+        <h1 class="text-2xl sm:text-4xl font-black tracking-tight text-gray-900 dark:text-white leading-tight">
+            Find Your <span class="bg-gradient-to-r from-sky-400 to-blue-600 bg-clip-text text-transparent">Dream
+                Team</span>
+        </h1>
 
-        <!-- Header Text -->
-        <div class="space-y-1 text-center md:text-left">
-            <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight">Search Games</h1>
-            <p class="text-xs md:text-sm text-sky-100 dark:text-sky-200">Find available matches and tournaments</p>
-        </div>
-
-        <!-- Search Box Container -->
-        <div class="w-full lg:max-w-2xl md:max-w-xl">
+        <!-- Search Bar Component -->
+        <div class="w-full">
             <x-search />
         </div>
-
-    </div>
+    </section>
 
     <!-- Games Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
