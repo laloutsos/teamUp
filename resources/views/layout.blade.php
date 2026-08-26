@@ -10,11 +10,40 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
     <script src="//unpkg.com/alpinejs" defer></script>
 
+    <style>
+        .theme-toggle-sun {
+            display: inline-block !important;
+        }
+
+        .theme-toggle-moon {
+            display: none !important;
+        }
+
+        html.dark .theme-toggle-sun {
+            display: none !important;
+        }
+
+        html.dark .theme-toggle-moon {
+            display: inline-block !important;
+        }
+    </style>
+
     <script>
-        if (localStorage.getItem('theme') === 'light') {
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia(
+                '(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
         } else {
-            document.documentElement.classList.remove('light');
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
+
+
+    <script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
         }
     </script>
 

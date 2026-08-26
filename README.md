@@ -41,19 +41,19 @@ Whether you are missing one player, looking for an entire team, or simply want t
 ## Technologies
 
 ### Backend
-- **Laravel** — PHP framework used for the application backend and overall architecture
-- **PostgreSQL** — Relational database for storing application data
-- **Laravel Middleware** — Authentication and access control
+- **Laravel** 
+- **PostgreSQL** 
+- **Laravel Middleware** 
 
 ### Frontend
-- **Blade** — Laravel's templating engine
-- **Tailwind CSS** — Utility-first CSS framework for responsive UI design
-- **Alpine.js** — Lightweight JavaScript framework for interactive UI components
-- **JavaScript** — Client-side functionality and dynamic interactions
-- **CSS** — Additional styling and customization
+- **Blade**
+- **Tailwind CSS**
+- **Alpine.js** 
+- **JavaScript** 
+- **CSS** 
 
 ### Maps
-- **Mapbox** — Interactive maps and location-based functionality
+- **Mapbox**
 
 ## Development Status
 
