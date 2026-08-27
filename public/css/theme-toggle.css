@@ -1,0 +1,22 @@
+/* Prevent Alpine.js elements from flashing before initialization */
+[x-cloak] {
+    display: none !important;
+}
+
+/* Light theme toggle icon visibility */
+.theme-toggle-sun {
+    display: inline-block !important;
+}
+
+.theme-toggle-moon {
+    display: none !important;
+}
+
+/* Dark theme toggle icon visibility */
+html.dark .theme-toggle-sun {
+    display: none !important;
+}
+
+html.dark .theme-toggle-moon {
+    display: inline-block !important;
+}
