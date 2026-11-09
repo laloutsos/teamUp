@@ -27,7 +27,8 @@ class User extends Authenticatable
         'avatar',
         'location',
         'latitude',
-        'longitude'
+        'longitude',
+        'google_id'
     ];
 
     /**

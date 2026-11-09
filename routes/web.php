@@ -11,7 +11,10 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\ApplicantController;
 use App\Http\Controllers\GeocodeController;
-
+use Laravel\Socialite\Facades\Socialite;
+use App\Models\User;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [HomeController::class, 'index'])->name('home')->middleware('auth');
 Route::get('/games/search', [GameController::class, 'search'])->name('games.search');
@@ -30,10 +33,14 @@ Route::put('/profile', [ProfileController::class, 'update'])->name('profile.upda
 Route::middleware('auth')->group(function () {
     Route::get('/bookmarks', [BookmarkController::class, 'index'])->name('bookmarks.index');
     Route::post('/bookmarks/{game}', [BookmarkController::class, 'store'])->name('bookmarks.store');
-    Route::delete('/bookmarks/{game}', [BookmarkController::class, 'destroy'])->name('bookmarks.destroy'); // <--- Πρόσθεσε αυτό
+    Route::delete('/bookmarks/{game}', [BookmarkController::class, 'destroy'])->name('bookmarks.destroy');
 });
 
 Route::post('/games/{game}/apply', [ApplicantController::class, 'store'])->name('applicant.store')->middleware('auth');
 Route::delete('/applicants/{applicant}', [ApplicantController::class, 'destroy'])->name('applicant.destroy')->middleware('auth');
 
 Route::get('/geocode', [GeocodeController::class, 'geocode']);
+
+// Google Auth Routes (Cleaned up!)
+Route::get('/auth/google/redirect', [LoginController::class, 'redirectToGoogle']);
+Route::get('/auth/google/callback', [LoginController::class, 'handleGoogleCallback']);
