@@ -36,6 +36,7 @@ class GameController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
     public function store(Request $request): RedirectResponse
     {
         $validatedData = $request->validate([
@@ -50,28 +51,17 @@ class GameController extends Controller
             'city' => 'required|string',
             'contact_email' => 'required|email',
             'contact_phone' => 'nullable|string',
-            'team_name' => 'nullable|string',
-            'team_description' => 'nullable|string',
-            'team_logo' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:2048'
         ]);
 
-        // Hardcoded user id
-        $validatedData['user_id'] = Auth::user()->id;
+        $validatedData['user_id'] = Auth::id();
 
-        // Check for image
-        if ($request->hasFile('team_logo')) {
-            // Store the file and get path
-            $path = $request->file('team_logo')->store('logos', 'public');
-
-            // Add path to validated data
-            $validatedData['team_logo'] = $path;
-        }
-
-        // Submit to Database
         Game::create($validatedData);
 
-        return redirect()->route('games.index')->with('success', 'Game Listing created successfully');
+        return redirect()
+            ->route('games.index')
+            ->with('success', 'Game Listing created successfully');
     }
+
 
     /**
      * Display the specified resource.
@@ -94,9 +84,9 @@ class GameController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Game $game)
+
+    public function update(Request $request, Game $game): RedirectResponse
     {
-        // Check if user is authorized
         $this->authorize('update', $game);
 
         $validatedData = $request->validate([
@@ -111,27 +101,15 @@ class GameController extends Controller
             'city' => 'required|string',
             'contact_email' => 'required|email',
             'contact_phone' => 'nullable|string',
-            'team_name' => 'nullable|string',
-            'team_description' => 'nullable|string',
-            'team_logo' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:2048'
         ]);
 
-        // Check for image
-        if ($request->hasFile('team_logo')) {
-            // Delete old logo
-            Storage::delete('public/logos/' . basename($game->team_logo));
-            // Store the file and get path
-            $path = $request->file('team_logo')->store('logos', 'public');
-
-            // Add path to validated data
-            $validatedData['team_logo'] = $path;
-        }
-
-        // Submit to Database
         $game->update($validatedData);
 
-        return redirect()->route('games.index')->with('success', 'Game Listing updated successfully');
+        return redirect()
+            ->route('games.index')
+            ->with('success', 'Game Listing updated successfully');
     }
+
 
     /**
      * Remove the specified resource from storage.

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Applicant;
 use App\Models\Game;
+use App\Notifications\TeamNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,16 +18,23 @@ class ApplicantController extends Controller
      */
     public function store(Request $request, Game $game): RedirectResponse
     {
-        // 1. Check if the user has already applied (Χρήση Auth::id())
+        $user = $request->user();
+
+        // Prevent the game creator from applying to their own game.
+        if ((int) $game->user_id === (int) $user->id) {
+            return back()->with('error', 'You cannot apply to your own game.');
+        }
+
+        // Check if the user has already applied.
         $existingApplication = Applicant::where('game_id', $game->id)
-            ->where('user_id', Auth::id())
+            ->where('user_id', $user->id)
             ->exists();
 
         if ($existingApplication) {
-            return redirect()->back()->with('error', 'You have already applied to this game');
+            return back()->with('error', 'You have already applied to this game.');
         }
 
-        // 2. Validation incoming data
+        // Validate application data.
         $validatedData = $request->validate([
             'full_name'     => 'required|string|max:255',
             'contact_phone' => 'nullable|string|max:20',
@@ -36,19 +44,36 @@ class ApplicantController extends Controller
             'resume_path'   => 'nullable|file|mimes:pdf|max:2048',
         ]);
 
-        // 3. Handle file upload (if present)
+        // Handle file upload.
         if ($request->hasFile('resume_path')) {
-            $validatedData['resume_path'] = $request->file('resume_path')->store('resumes', 'public');
+            $validatedData['resume_path'] = $request->file('resume_path')
+                ->store('resumes', 'public');
         }
 
-        // 4. Assign Game ID & User ID
+        // Assign Game ID & User ID.
         $validatedData['game_id'] = $game->id;
-        $validatedData['user_id'] = Auth::id();
+        $validatedData['user_id'] = $user->id;
 
-        // 5. Save application
+        // Save application.
         Applicant::create($validatedData);
 
-        return redirect()->back()->with('success', 'Application submitted successfully!');
+        // Notify the game creator.
+        $gameCreator = $game->user;
+
+        if ($gameCreator) {
+            $gameCreator->notify(new TeamNotification([
+                'category' => 'game',
+                'title' => 'New Game Applicant',
+                'message' => $user->name . ' has applied to your game: ' . $game->title . '.',
+                'icon' => 'fa-user-plus',
+                'url' => route('games.show', $game),
+                'game_id' => $game->id,
+                'actor_id' => $user->id,
+                'actor_name' => $user->name,
+            ]));
+        }
+
+        return back()->with('success', 'Application submitted successfully!');
     }
 
     /**
@@ -63,6 +88,6 @@ class ApplicantController extends Controller
 
         $applicant->delete();
 
-        return redirect()->back()->with('success', 'Applicant deleted successfully');
+        return back()->with('success', 'Applicant deleted successfully');
     }
 }

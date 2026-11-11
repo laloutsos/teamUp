@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Team;
 use App\Models\User;
+use App\Notifications\TeamNotification;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 
@@ -19,7 +20,7 @@ class TeamMembershipController extends Controller
         $user = $request->user();
 
         // The owner cannot request to join their own team.
-        if ($team->created_by === $user->id) {
+        if ((int) $team->created_by === (int) $user->id) {
             return back()->with('error', 'You are already the owner of this team.');
         }
 
@@ -47,6 +48,22 @@ class TeamMembershipController extends Controller
             'status' => 'pending',
             'requested_at' => now(),
         ]);
+
+        // Notify the team owner.
+        $owner = User::find($team->created_by);
+
+        if ($owner) {
+            $owner->notify(new TeamNotification([
+                'category' => 'team',
+                'title' => 'New Join Request',
+                'message' => $user->name . ' has requested to join ' . $team->name . '.',
+                'icon' => 'fa-user-plus',
+                'url' => route('teams.show', $team),
+                'team_id' => $team->id,
+                'actor_id' => $user->id,
+                'actor_name' => $user->name,
+            ]));
+        }
 
         return back()->with(
             'success',
@@ -80,6 +97,18 @@ class TeamMembershipController extends Controller
             'joined_at' => now(),
         ]);
 
+        // Notify the approved user.
+        $user->notify(new TeamNotification([
+            'category' => 'team',
+            'title' => 'Join Request Approved',
+            'message' => 'Your request to join ' . $team->name . ' has been approved!',
+            'icon' => 'fa-circle-check',
+            'url' => route('teams.show', $team),
+            'team_id' => $team->id,
+            'actor_id' => $request->user()->id,
+            'actor_name' => $request->user()->name,
+        ]));
+
         return back()->with(
             'success',
             $user->name . ' has been added to the team!'
@@ -100,12 +129,27 @@ class TeamMembershipController extends Controller
 
         $membership->delete();
 
+        // Notify the rejected user.
+        $user->notify(new TeamNotification([
+            'category' => 'team',
+            'title' => 'Join Request Rejected',
+            'message' => 'Your request to join ' . $team->name . ' was rejected.',
+            'icon' => 'fa-circle-xmark',
+            'url' => route('teams.show', $team),
+            'team_id' => $team->id,
+            'actor_id' => $request->user()->id,
+            'actor_name' => $request->user()->name,
+        ]));
+
         return back()->with(
             'success',
             'Join request from ' . $user->name . ' has been rejected.'
         );
     }
 
+    /**
+     * Remove an active member.
+     */
     public function remove(Request $request, Team $team, User $user)
     {
         $this->authorize('manageMembers', $team);
@@ -117,6 +161,18 @@ class TeamMembershipController extends Controller
             ->firstOrFail();
 
         $membership->delete();
+
+        // Notify the removed user.
+        $user->notify(new TeamNotification([
+            'category' => 'team',
+            'title' => 'Removed from Team',
+            'message' => 'You have been removed from ' . $team->name . '.',
+            'icon' => 'fa-user-minus',
+            'url' => route('teams.show', $team),
+            'team_id' => $team->id,
+            'actor_id' => $request->user()->id,
+            'actor_name' => $request->user()->name,
+        ]));
 
         return back()->with(
             'success',

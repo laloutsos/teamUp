@@ -17,6 +17,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TeamMembershipController;
+use App\Http\Controllers\NotificationController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home')->middleware('auth');
 Route::get('/games/search', [GameController::class, 'search'])->name('games.search');
@@ -76,7 +77,12 @@ Route::get('/teams/{team}/edit', [TeamController::class, 'edit'])
 Route::put('/teams/{team}', [TeamController::class, 'update'])
     ->name('teams.update');
 
+
+// Teams
 Route::middleware('auth')->group(function () {
+
+    Route::resource('teams', TeamController::class)
+        ->only(['index', 'create', 'store', 'show', 'edit', 'update']);
 
     // Submit join request
     Route::post('/teams/{team}/join', [TeamMembershipController::class, 'store'])
@@ -90,9 +96,24 @@ Route::middleware('auth')->group(function () {
     Route::delete('/teams/{team}/requests/{user}', [TeamMembershipController::class, 'reject'])
         ->name('teams.requests.reject');
 
-    // Kick a member out of the team 
-    Route::delete(
-        '/teams/{team}/members/{user}',
-        [TeamMembershipController::class, 'remove']
-    )->name('teams.members.remove');
+    // Remove team member
+    Route::delete('/teams/{team}/members/{user}', [TeamMembershipController::class, 'remove'])
+        ->name('teams.members.remove');
+
+
+    // Notifications
+    Route::get('/notifications', [NotificationController::class, 'index'])
+        ->name('notifications.index');
+
+    Route::post('/notifications/mark-all-read', [NotificationController::class, 'markAllAsRead'])
+        ->name('notifications.markAllRead');
+
+    Route::post('/notifications/{notification}/read', [NotificationController::class, 'read'])
+        ->name('notifications.read');
+
+    Route::delete('/notifications/{notification}', [NotificationController::class, 'destroy'])
+        ->name('notifications.destroy');
+
+    Route::delete('/notifications', [NotificationController::class, 'destroyAll'])
+        ->name('notifications.destroyAll');
 });

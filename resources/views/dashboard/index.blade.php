@@ -138,159 +138,171 @@
                 </form>
             </div>
 
-            <!-- Game Listings -->
-            <div class="lg:col-span-2 space-y-6">
 
-                <!-- Page Header -->
-                <div
-                    class="flex flex-col sm:flex-row sm:items-center justify-between gap-5 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/80 p-6 rounded-3xl shadow-sm transition-colors">
+            <!-- Game Listings & My Teams -->
+            <div class="lg:col-span-2 space-y-8">
 
-                    <div>
-                        <h3
-                            class="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
-                            <i class="fa-solid fa-list-check text-sky-500 dark:text-sky-400"></i>
-                            <span>My Game Listings</span>
-                        </h3>
+                <!-- ==================== MY GAME LISTINGS ==================== -->
+                <section
+                    class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/80 rounded-3xl shadow-sm overflow-hidden transition-colors">
 
-                        <p class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm mt-1">
-                            Manage and track all the matches you have created.
-                        </p>
-                    </div>
-
-                    <!-- Create New Game -->
-                    <a href="{{ route('games.create') }}"
-                        class="inline-flex items-center justify-center gap-2 min-w-[155px] px-5 py-3 bg-sky-500 hover:bg-sky-600 dark:bg-sky-500 dark:hover:bg-sky-400 text-white text-xs font-semibold rounded-2xl shadow-md shadow-sky-500/20 active:scale-95 transition-all whitespace-nowrap">
-                        <i class="fa-solid fa-plus"></i>
-                        <span>Create New Game</span>
-                    </a>
-
-                </div>
-
-                <!-- Games List -->
-                <div class="space-y-4">
-
-                    @forelse($games as $game)
-                        <div
-                            class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/70 hover:border-gray-200 dark:hover:border-gray-600 rounded-2xl p-5 shadow-sm transition-all space-y-4">
-
-                            <!-- Top Section: Game Details & Actions -->
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-
-                                <!-- Game Details -->
-                                <div class="space-y-2">
-
-                                    <div class="flex items-center gap-2 flex-wrap">
-                                        <span
-                                            class="px-2.5 py-1 bg-sky-50 dark:bg-sky-950/50 text-sky-700 dark:text-sky-300 border border-sky-100 dark:border-sky-800/60 rounded-lg text-xs font-bold uppercase tracking-wider">
-                                            {{ $game->game_type ?? 'Match' }}
-                                        </span>
-
-                                        <h4 class="text-base font-bold text-gray-900 dark:text-white">
-                                            {{ $game->title }}
-                                        </h4>
-                                    </div>
-
-                                    <!-- Info Pills -->
-                                    <div
-                                        class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400 flex-wrap">
-
-                                        @if (isset($game->city) || isset($game->exact_location))
-                                            <span class="flex items-center gap-1">
-                                                <i
-                                                    class="fa-solid fa-location-dot text-rose-500 dark:text-rose-400"></i>
-                                                {{ $game->city ?? $game->exact_location }}
-                                            </span>
-                                        @endif
-
-                                        @if (isset($game->created_at))
-                                            <span class="flex items-center gap-1">
-                                                <i class="fa-solid fa-calendar text-gray-400 dark:text-gray-500"></i>
-                                                {{ $game->created_at->format('d M Y') }}
-                                            </span>
-                                        @endif
-
-                                    </div>
-                                </div>
-
-                                <!-- Actions -->
-                                <div
-                                    class="flex items-center gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-gray-100 dark:border-gray-700/60 justify-end">
-                                    <a href="{{ route('games.show', $game) }}"
-                                        class="px-3 py-2 text-xs font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors flex items-center gap-1.5">
-                                        <i class="fa-solid fa-eye text-gray-400 dark:text-gray-400"></i>
-                                        <span>View</span>
-                                    </a>
-
-                                    @if (Route::has('games.edit'))
-                                        <a href="{{ route('games.edit', $game) }}"
-                                            class="px-3 py-2 text-xs font-semibold text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 bg-sky-50 dark:bg-sky-950/40 hover:bg-sky-100 dark:hover:bg-sky-900/50 rounded-xl transition-colors flex items-center gap-1.5">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                            <span>Edit</span>
-                                        </a>
-                                    @endif
-
-                                    @if (Route::has('games.destroy'))
-                                        <form method="POST"
-                                            action="{{ route('games.destroy', $game) }}?from=dashboard"
-                                            onsubmit="return confirm('Are you sure you want to delete this game?');">
-                                            @csrf
-                                            @method('DELETE')
-
-                                            <button type="submit"
-                                                class="px-3 py-2 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/50 rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer">
-                                                <i class="fa-solid fa-trash-can"></i>
-                                                <span>Delete</span>
-                                            </button>
-                                        </form>
-                                    @endif
-                                </div>
-                            </div>
-
-                            <!-- Applicants -->
-                            <x-applicants :game="$game" />
-
-                        </div>
-
-                    @empty
-
-                        <!-- Empty State -->
-                        <div
-                            class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/80 rounded-3xl p-10 text-center space-y-4 shadow-sm transition-colors">
-                            <div
-                                class="w-16 h-16 bg-sky-50 dark:bg-sky-950/50 text-sky-500 dark:text-sky-400 rounded-full flex items-center justify-center mx-auto text-2xl">
-                                <i class="fa-solid fa-folder-open"></i>
-                            </div>
-
-                            <div class="space-y-1">
-                                <h4 class="text-base font-bold text-gray-900 dark:text-white">
-                                    No Game Listings Found
-                                </h4>
-
-                                <p class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm max-w-sm mx-auto">
-                                    You haven't created any matches yet. Start organizing your first game now!
-                                </p>
-                            </div>
-
-                            <a href="{{ route('games.create') }}"
-                                class="inline-flex items-center gap-2 px-5 py-2.5 bg-sky-500 hover:bg-sky-600 dark:bg-sky-500 dark:hover:bg-sky-400 text-white text-xs font-semibold rounded-2xl shadow-md shadow-sky-500/20 active:scale-95 transition-all">
-                                <i class="fa-solid fa-plus"></i>
-                                <span>Create Your First Game</span>
-                            </a>
-                        </div>
-                    @endforelse
-
-                </div>
-
-                <!-- My Teams -->
-                <div class="space-y-6">
-
-                    <!-- Section Header -->
+                    <!-- Games Header -->
                     <div
-                        class="flex flex-col sm:flex-row sm:items-center justify-between gap-5 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/80 p-6 rounded-3xl shadow-sm transition-colors">
+                        class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 border-b border-gray-100 dark:border-gray-700/70 bg-gray-50/50 dark:bg-gray-800/50">
 
                         <div>
                             <h3
-                                class="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
+                                class="text-xl sm:text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
+                                <i class="fa-solid fa-list-check text-sky-500 dark:text-sky-400"></i>
+                                <span>My Game Listings</span>
+                            </h3>
+
+                            <p class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm mt-1">
+                                Manage and track all the matches you have created.
+                            </p>
+                        </div>
+
+                        <a href="{{ route('games.create') }}"
+                            class="inline-flex items-center justify-center gap-2 px-5 py-3 bg-sky-500 hover:bg-sky-600 dark:bg-sky-500 dark:hover:bg-sky-400 text-white text-xs font-semibold rounded-2xl shadow-md shadow-sky-500/20 active:scale-95 transition-all whitespace-nowrap">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Create New Game</span>
+                        </a>
+                    </div>
+
+                    <!-- Games List -->
+                    <div class="divide-y divide-gray-100 dark:divide-gray-700/60">
+
+                        @forelse($games as $game)
+                            <div
+                                class="p-5 sm:p-6 hover:bg-gray-50/70 dark:hover:bg-gray-700/20 transition-colors space-y-4">
+
+                                <!-- Game Details & Actions -->
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+
+                                    <div class="space-y-2 min-w-0">
+
+                                        <div class="flex items-center gap-2 flex-wrap">
+
+                                            <span
+                                                class="px-2.5 py-1 bg-sky-50 dark:bg-sky-950/50 text-sky-700 dark:text-sky-300 border border-sky-100 dark:border-sky-800/60 rounded-lg text-xs font-bold uppercase tracking-wider">
+                                                {{ $game->game_type ?? 'Match' }}
+                                            </span>
+
+                                            <h4 class="text-base font-bold text-gray-900 dark:text-white">
+                                                {{ $game->title }}
+                                            </h4>
+
+                                        </div>
+
+                                        <!-- Game Information -->
+                                        <div
+                                            class="flex items-center gap-x-4 gap-y-2 text-xs text-gray-500 dark:text-gray-400 flex-wrap">
+
+                                            @if ($game->city || $game->exact_location)
+                                                <span class="flex items-center gap-1.5">
+                                                    <i
+                                                        class="fa-solid fa-location-dot text-rose-500 dark:text-rose-400"></i>
+                                                    {{ $game->city ?? $game->exact_location }}
+                                                </span>
+                                            @endif
+
+                                            @if ($game->created_at)
+                                                <span class="flex items-center gap-1.5">
+                                                    <i
+                                                        class="fa-solid fa-calendar text-gray-400 dark:text-gray-500"></i>
+                                                    {{ $game->created_at->format('d M Y') }}
+                                                </span>
+                                            @endif
+
+                                        </div>
+                                    </div>
+
+                                    <!-- Actions -->
+                                    <div
+                                        class="flex items-center gap-2 justify-end pt-3 sm:pt-0 border-t sm:border-t-0 border-gray-100 dark:border-gray-700/60 shrink-0">
+
+                                        <a href="{{ route('games.show', $game) }}"
+                                            class="px-3 py-2 text-xs font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white bg-gray-100/70 dark:bg-gray-700/60 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-xl transition-colors flex items-center gap-1.5">
+                                            <i class="fa-solid fa-eye"></i>
+                                            <span>View</span>
+                                        </a>
+
+                                        @if (Route::has('games.edit'))
+                                            <a href="{{ route('games.edit', $game) }}"
+                                                class="px-3 py-2 text-xs font-semibold text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 bg-sky-50 dark:bg-sky-950/40 hover:bg-sky-100 dark:hover:bg-sky-900/50 rounded-xl transition-colors flex items-center gap-1.5">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                                <span>Edit</span>
+                                            </a>
+                                        @endif
+
+                                        @if (Route::has('games.destroy'))
+                                            <form method="POST"
+                                                action="{{ route('games.destroy', $game) }}?from=dashboard"
+                                                onsubmit="return confirm('Are you sure you want to delete this game?');">
+
+                                                @csrf
+                                                @method('DELETE')
+
+                                                <button type="submit"
+                                                    class="px-3 py-2 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/50 rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer">
+                                                    <i class="fa-solid fa-trash-can"></i>
+                                                    <span>Delete</span>
+                                                </button>
+                                            </form>
+                                        @endif
+
+                                    </div>
+                                </div>
+
+                                <!-- Applicants -->
+                                <x-applicants :game="$game" />
+
+                            </div>
+
+                        @empty
+
+                            <!-- Empty Games State -->
+                            <div class="p-10 sm:p-12 text-center space-y-4">
+
+                                <div
+                                    class="w-16 h-16 bg-sky-50 dark:bg-sky-950/50 text-sky-500 dark:text-sky-400 rounded-2xl flex items-center justify-center mx-auto text-2xl">
+                                    <i class="fa-solid fa-folder-open"></i>
+                                </div>
+
+                                <div class="space-y-1">
+                                    <h4 class="text-base font-bold text-gray-900 dark:text-white">
+                                        No Game Listings Found
+                                    </h4>
+
+                                    <p class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm max-w-sm mx-auto">
+                                        You haven't created any matches yet. Start organizing your first game now!
+                                    </p>
+                                </div>
+
+                                <a href="{{ route('games.create') }}"
+                                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-sky-500 hover:bg-sky-600 dark:bg-sky-500 dark:hover:bg-sky-400 text-white text-xs font-semibold rounded-2xl shadow-md shadow-sky-500/20 active:scale-95 transition-all">
+                                    <i class="fa-solid fa-plus"></i>
+                                    <span>Create Your First Game</span>
+                                </a>
+
+                            </div>
+                        @endforelse
+
+                    </div>
+                </section>
+
+
+                <!-- ==================== MY TEAMS ==================== -->
+                <section
+                    class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/80 rounded-3xl shadow-sm overflow-hidden transition-colors">
+
+                    <!-- Teams Header -->
+                    <div
+                        class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 border-b border-gray-100 dark:border-gray-700/70 bg-gray-50/50 dark:bg-gray-800/50">
+
+                        <div>
+                            <h3
+                                class="text-xl sm:text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
                                 <i class="fa-solid fa-people-group text-emerald-500 dark:text-emerald-400"></i>
                                 <span>My Teams</span>
                             </h3>
@@ -301,24 +313,23 @@
                         </div>
 
                         <a href="{{ route('teams.create') }}"
-                            class="inline-flex items-center justify-center gap-2 min-w-[155px] px-5 py-3 bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white text-xs font-semibold rounded-2xl shadow-md shadow-emerald-500/20 active:scale-95 transition-all whitespace-nowrap">
-
+                            class="inline-flex items-center justify-center gap-2 px-5 py-3 bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white text-xs font-semibold rounded-2xl shadow-md shadow-emerald-500/20 active:scale-95 transition-all whitespace-nowrap">
                             <i class="fa-solid fa-plus"></i>
                             <span>Create New Team</span>
                         </a>
                     </div>
 
                     <!-- Teams List -->
-                    <div class="space-y-4">
+                    <div class="divide-y divide-gray-100 dark:divide-gray-700/60">
 
                         @forelse($teams as $team)
                             <a href="{{ route('teams.show', $team) }}"
-                                class="block bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/70 hover:border-emerald-300 dark:hover:border-emerald-600 rounded-2xl p-5 shadow-sm transition-all">
+                                class="block p-5 sm:p-6 hover:bg-emerald-50/30 dark:hover:bg-emerald-950/10 transition-colors">
 
                                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
 
                                     <!-- Team Details -->
-                                    <div class="space-y-2">
+                                    <div class="space-y-2 min-w-0">
 
                                         <div class="flex items-center gap-2 flex-wrap">
 
@@ -330,11 +341,13 @@
                                             @if ($team->created_by === auth()->id())
                                                 <span
                                                     class="px-2.5 py-1 bg-sky-50 dark:bg-sky-950/50 text-sky-700 dark:text-sky-300 border border-sky-100 dark:border-sky-800/60 rounded-lg text-xs font-bold">
+                                                    <i class="fa-solid fa-crown mr-1"></i>
                                                     Owner
                                                 </span>
                                             @else
                                                 <span
                                                     class="px-2.5 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-lg text-xs font-bold">
+                                                    <i class="fa-solid fa-user mr-1"></i>
                                                     Member
                                                 </span>
                                             @endif
@@ -351,19 +364,19 @@
                                             </p>
                                         @endif
 
-                                        <!-- Info Pills -->
+                                        <!-- Team Information -->
                                         <div
-                                            class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400 flex-wrap">
+                                            class="flex items-center gap-x-4 gap-y-2 text-xs text-gray-500 dark:text-gray-400 flex-wrap">
 
                                             @if ($team->city)
-                                                <span class="flex items-center gap-1">
+                                                <span class="flex items-center gap-1.5">
                                                     <i
                                                         class="fa-solid fa-location-dot text-rose-500 dark:text-rose-400"></i>
                                                     {{ $team->city }}
                                                 </span>
                                             @endif
 
-                                            <span class="flex items-center gap-1">
+                                            <span class="flex items-center gap-1.5">
                                                 <i
                                                     class="fa-solid fa-users text-emerald-500 dark:text-emerald-400"></i>
                                                 {{ $team->members_count }}
@@ -371,7 +384,7 @@
                                             </span>
 
                                             @if ($team->created_at)
-                                                <span class="flex items-center gap-1">
+                                                <span class="flex items-center gap-1.5">
                                                     <i
                                                         class="fa-solid fa-calendar text-gray-400 dark:text-gray-500"></i>
                                                     {{ $team->created_at->format('d M Y') }}
@@ -381,16 +394,17 @@
                                         </div>
                                     </div>
 
-                                    <!-- View Action -->
+                                    <!-- View Team Action -->
                                     <div
-                                        class="flex items-center justify-end pt-2 sm:pt-0 border-t sm:border-t-0 border-gray-100 dark:border-gray-700/60">
+                                        class="flex items-center justify-end pt-3 sm:pt-0 border-t sm:border-t-0 border-gray-100 dark:border-gray-700/60 shrink-0">
 
                                         <span
-                                            class="px-3 py-2 text-xs font-semibold text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 bg-gray-50 dark:bg-gray-700/50 rounded-xl transition-colors flex items-center gap-1.5">
+                                            class="px-3 py-2 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 rounded-xl transition-colors flex items-center gap-2">
 
-                                            <i class="fa-solid fa-eye text-gray-400"></i>
+                                            <i class="fa-solid fa-eye"></i>
                                             <span>View Team</span>
-                                            <i class="fa-solid fa-arrow-right ml-1"></i>
+                                            <i class="fa-solid fa-arrow-right"></i>
+
                                         </span>
 
                                     </div>
@@ -399,13 +413,11 @@
 
                         @empty
 
-                            <!-- Empty State -->
-                            <div
-                                class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/80 rounded-3xl p-10 text-center space-y-4 shadow-sm transition-colors">
+                            <!-- Empty Teams State -->
+                            <div class="p-10 sm:p-12 text-center space-y-4">
 
                                 <div
-                                    class="w-16 h-16 bg-emerald-50 dark:bg-emerald-950/50 text-emerald-500 dark:text-emerald-400 rounded-full flex items-center justify-center mx-auto text-2xl">
-
+                                    class="w-16 h-16 bg-emerald-50 dark:bg-emerald-950/50 text-emerald-500 dark:text-emerald-400 rounded-2xl flex items-center justify-center mx-auto text-2xl">
                                     <i class="fa-solid fa-people-group"></i>
                                 </div>
 
@@ -422,18 +434,21 @@
 
                                 <a href="{{ route('teams.create') }}"
                                     class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white text-xs font-semibold rounded-2xl shadow-md shadow-emerald-500/20 active:scale-95 transition-all">
-
                                     <i class="fa-solid fa-plus"></i>
                                     <span>Create Your First Team</span>
                                 </a>
+
                             </div>
                         @endforelse
 
                     </div>
-                </div>
+                </section>
 
             </div>
-        </section>
+
+
+    </div>
+    </section>
     </div>
 
     <!-- Mapbox Initialization Script -->
