@@ -143,7 +143,8 @@
 
                 <!-- Page Header -->
                 <div
-                    class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/80 p-6 rounded-3xl shadow-sm transition-colors">
+                    class="flex flex-col sm:flex-row sm:items-center justify-between gap-5 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/80 p-6 rounded-3xl shadow-sm transition-colors">
+
                     <div>
                         <h3
                             class="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
@@ -156,11 +157,13 @@
                         </p>
                     </div>
 
+                    <!-- Create New Game -->
                     <a href="{{ route('games.create') }}"
-                        class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-sky-500 hover:bg-sky-600 dark:bg-sky-500 dark:hover:bg-sky-400 text-white text-xs font-semibold rounded-2xl shadow-md shadow-sky-500/20 active:scale-95 transition-all whitespace-nowrap">
+                        class="inline-flex items-center justify-center gap-2 min-w-[155px] px-5 py-3 bg-sky-500 hover:bg-sky-600 dark:bg-sky-500 dark:hover:bg-sky-400 text-white text-xs font-semibold rounded-2xl shadow-md shadow-sky-500/20 active:scale-95 transition-all whitespace-nowrap">
                         <i class="fa-solid fa-plus"></i>
                         <span>Create New Game</span>
                     </a>
+
                 </div>
 
                 <!-- Games List -->
@@ -277,6 +280,158 @@
                     @endforelse
 
                 </div>
+
+                <!-- My Teams -->
+                <div class="space-y-6">
+
+                    <!-- Section Header -->
+                    <div
+                        class="flex flex-col sm:flex-row sm:items-center justify-between gap-5 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/80 p-6 rounded-3xl shadow-sm transition-colors">
+
+                        <div>
+                            <h3
+                                class="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
+                                <i class="fa-solid fa-people-group text-emerald-500 dark:text-emerald-400"></i>
+                                <span>My Teams</span>
+                            </h3>
+
+                            <p class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm mt-1">
+                                View and manage the teams you have created or joined.
+                            </p>
+                        </div>
+
+                        <a href="{{ route('teams.create') }}"
+                            class="inline-flex items-center justify-center gap-2 min-w-[155px] px-5 py-3 bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white text-xs font-semibold rounded-2xl shadow-md shadow-emerald-500/20 active:scale-95 transition-all whitespace-nowrap">
+
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Create New Team</span>
+                        </a>
+                    </div>
+
+                    <!-- Teams List -->
+                    <div class="space-y-4">
+
+                        @forelse($teams as $team)
+                            <a href="{{ route('teams.show', $team) }}"
+                                class="block bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/70 hover:border-emerald-300 dark:hover:border-emerald-600 rounded-2xl p-5 shadow-sm transition-all">
+
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+
+                                    <!-- Team Details -->
+                                    <div class="space-y-2">
+
+                                        <div class="flex items-center gap-2 flex-wrap">
+
+                                            <span
+                                                class="px-2.5 py-1 bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-100 dark:border-emerald-800/60 rounded-lg text-xs font-bold uppercase tracking-wider">
+                                                {{ $team->sport }}
+                                            </span>
+
+                                            @if ($team->created_by === auth()->id())
+                                                <span
+                                                    class="px-2.5 py-1 bg-sky-50 dark:bg-sky-950/50 text-sky-700 dark:text-sky-300 border border-sky-100 dark:border-sky-800/60 rounded-lg text-xs font-bold">
+                                                    Owner
+                                                </span>
+                                            @else
+                                                <span
+                                                    class="px-2.5 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-lg text-xs font-bold">
+                                                    Member
+                                                </span>
+                                            @endif
+
+                                        </div>
+
+                                        <h4 class="text-base font-bold text-gray-900 dark:text-white">
+                                            {{ $team->name }}
+                                        </h4>
+
+                                        @if ($team->description)
+                                            <p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-2">
+                                                {{ $team->description }}
+                                            </p>
+                                        @endif
+
+                                        <!-- Info Pills -->
+                                        <div
+                                            class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400 flex-wrap">
+
+                                            @if ($team->city)
+                                                <span class="flex items-center gap-1">
+                                                    <i
+                                                        class="fa-solid fa-location-dot text-rose-500 dark:text-rose-400"></i>
+                                                    {{ $team->city }}
+                                                </span>
+                                            @endif
+
+                                            <span class="flex items-center gap-1">
+                                                <i
+                                                    class="fa-solid fa-users text-emerald-500 dark:text-emerald-400"></i>
+                                                {{ $team->members_count }}
+                                                {{ $team->members_count === 1 ? 'member' : 'members' }}
+                                            </span>
+
+                                            @if ($team->created_at)
+                                                <span class="flex items-center gap-1">
+                                                    <i
+                                                        class="fa-solid fa-calendar text-gray-400 dark:text-gray-500"></i>
+                                                    {{ $team->created_at->format('d M Y') }}
+                                                </span>
+                                            @endif
+
+                                        </div>
+                                    </div>
+
+                                    <!-- View Action -->
+                                    <div
+                                        class="flex items-center justify-end pt-2 sm:pt-0 border-t sm:border-t-0 border-gray-100 dark:border-gray-700/60">
+
+                                        <span
+                                            class="px-3 py-2 text-xs font-semibold text-gray-600 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 bg-gray-50 dark:bg-gray-700/50 rounded-xl transition-colors flex items-center gap-1.5">
+
+                                            <i class="fa-solid fa-eye text-gray-400"></i>
+                                            <span>View Team</span>
+                                            <i class="fa-solid fa-arrow-right ml-1"></i>
+                                        </span>
+
+                                    </div>
+                                </div>
+                            </a>
+
+                        @empty
+
+                            <!-- Empty State -->
+                            <div
+                                class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/80 rounded-3xl p-10 text-center space-y-4 shadow-sm transition-colors">
+
+                                <div
+                                    class="w-16 h-16 bg-emerald-50 dark:bg-emerald-950/50 text-emerald-500 dark:text-emerald-400 rounded-full flex items-center justify-center mx-auto text-2xl">
+
+                                    <i class="fa-solid fa-people-group"></i>
+                                </div>
+
+                                <div class="space-y-1">
+                                    <h4 class="text-base font-bold text-gray-900 dark:text-white">
+                                        No Teams Found
+                                    </h4>
+
+                                    <p class="text-gray-500 dark:text-gray-400 text-xs sm:text-sm max-w-sm mx-auto">
+                                        You haven't created or joined any teams yet. Create your own team or join an
+                                        existing one!
+                                    </p>
+                                </div>
+
+                                <a href="{{ route('teams.create') }}"
+                                    class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white text-xs font-semibold rounded-2xl shadow-md shadow-emerald-500/20 active:scale-95 transition-all">
+
+                                    <i class="fa-solid fa-plus"></i>
+                                    <span>Create Your First Team</span>
+                                </a>
+                            </div>
+                        @endforelse
+
+                    </div>
+                </div>
+
             </div>
         </section>
     </div>

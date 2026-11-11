@@ -70,4 +70,26 @@ class User extends Authenticatable
     {
         return $this->hasMany(Applicant::class, 'user_id');
     }
+
+
+    public function teamMemberships(): HasMany
+    {
+        return $this->hasMany(TeamMembership::class);
+    }
+
+    public function teams(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Team::class,
+            'team_memberships'
+        )
+            ->withPivot([
+                'role',
+                'status',
+                'requested_at',
+                'joined_at',
+            ])
+            ->wherePivot('status', 'active')
+            ->withTimestamps();
+    }
 }
