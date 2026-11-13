@@ -13,6 +13,7 @@ use App\Http\Controllers\ApplicantController;
 use App\Http\Controllers\GeocodeController;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
+use App\Models\ChatMessage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\TeamController;
@@ -116,4 +117,8 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('/notifications', [NotificationController::class, 'destroyAll'])
         ->name('notifications.destroyAll');
+
+    // Messages
+
+    Route::get("chat", ChatMessage::class)->name("chat");
 });
