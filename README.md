@@ -22,12 +22,18 @@ Other users can search for listings using criteria such as **location, sport, or
 
 When players find a suitable listing, they can join the game and fill the remaining spots. This makes it easier for groups to complete their teams and for individual players to find games they can participate in.
 
+Users can also create their own sports teams, manage their teams, and join existing teams created by other members. This allows players to build communities, connect with other sports enthusiasts, and organize games together.
+
 ## Key Features
 
 * Create and publish sports game listings
 * Search for games by location, sport, or tags
 * Find teammates or opponents
 * Join existing games with available spots
+* Create and manage custom sports teams
+* Join teams created by other users
+* Real-time live notifications
+* Notification center to view and manage notifications
 * Support for different sports and game formats
 * Responsive design for both desktop and mobile devices
 * Simple and user-friendly interface
@@ -36,21 +42,24 @@ When players find a suitable listing, they can join the game and fill the remain
 
 The goal of TeamUp is to make finding players and organizing sports games simple, fast, and accessible.
 
-Whether you are missing one player, looking for an entire team, or simply want to find people nearby who share the same passion for a sport, TeamUp provides a single platform to connect with them.
+Whether you are missing one player, looking for an entire team, interested in creating your own sports team, or simply want to find people nearby who share the same passion for a sport, TeamUp provides a single platform to connect with them.
 
 ## Technologies
 
 ### Backend
-- **Laravel** 
-- **PostgreSQL** 
-- **Laravel Middleware** 
+- **Laravel**
+- **PostgreSQL**
+- **Laravel Middleware**
+- **Laravel Notifications**
+- **Laravel Broadcasting**
 
 ### Frontend
 - **Blade**
 - **Tailwind CSS**
-- **Alpine.js** 
-- **JavaScript** 
-- **CSS** 
+- **Alpine.js**
+- **JavaScript**
+- **CSS**
+- **Laravel Echo**
 
 ### Maps
 - **Mapbox**
